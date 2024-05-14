@@ -12,7 +12,6 @@ import { useSearchParams } from "next/navigation";
 
 const CatWiseProducts = ({ params }: any) => {
   const searchParams = useSearchParams();
-  console.log("searchParams", searchParams);
   const [productList, setProductList] = useState<any>([]);
   const dispatch = useDispatch();
   const cart = useSelector((state: any) => state.cart);
@@ -49,7 +48,7 @@ const CatWiseProducts = ({ params }: any) => {
                   alt={callout?.images && callout?.images[0]}
                 />
               </Link>
-              <div className="pb-1 flex flex-col text-center items-center overflow-hidden">
+              <div className="pb-1 flex flex-col text-center items-center overflow-hidden px-1">
                 <h2 className="mt-2 text-sm truncate overflow-hidden mx-2 w-full font-medium">
                   {callout.title}
                 </h2>

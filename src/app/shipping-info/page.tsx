@@ -1,34 +1,30 @@
 "use client";
 import { useState, useCallback } from "react";
 import { ArrowLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
 import useRazorpay from "react-razorpay";
 import { useDispatch, useSelector } from "react-redux";
 import { resetCart } from "@/lib/slices/cartSlice";
 import Stepper from "@/components/stepper";
+import { useRouter } from "next/navigation";
 const steps = ["Address", "Shipping Info", "Payment"];
 
 export default function ShippingInfo() {
   const router = useRouter();
-  const data = router.query;
   const dispatch = useDispatch();
   const Razorpay = useRazorpay();
   const cart = useSelector((state: any) => state.cart);
   const user = useSelector((state: any) => state.user.user);
-  console.log("cart", cart);
-  console.log("user", user);
-  console.log("data***", data);
   const [currentStep, setCurrentStep] = useState(2);
   const [complete, setComplete] = useState(false);
 
   const saveOrder = (order_id: string) => {
     const shippingInfo = {
-      address: data.address,
-      pinCode: data.pinCode,
-      city: data?.city,
-      state: data?.state,
+      address: "abcd",
+      pinCode: "125001",
+      city: "Hisar",
+      state: "Haryana",
       country: "india",
-      phoneNo: data?.mobile,
+      phoneNo: "8765433456",
     };
     const path = process.env.NEXT_PUBLIC_API_PATH;
     fetch(`${path}/api/order/saveOrder`, {
@@ -135,8 +131,8 @@ export default function ShippingInfo() {
         <div>
           <div className="flex  flex-col py-1  items-baseline text-base font-medium text-gray-900">
             <h2 className="font-sans">Deliver Here</h2>
-            <h2>{`${data.name},${data.address}, ${data.city},${data.state}`}</h2>
-            <h2>{`Mobile/Phone:${data.mobile}`}</h2>
+            {/* <h2>{`${data.name},${data.address}, ${data.city},${data.state}`}</h2>
+            <h2>{`Mobile/Phone:${data.mobile}`}</h2> */}
           </div>
         </div>
 

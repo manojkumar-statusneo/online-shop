@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ParentContainer from "@/components/parentContainer";
 import { addToCart } from "@/lib/slices/cartSlice";
 import { BottomSheet } from "react-spring-bottom-sheet";
+import Link from "next/link";
 
 const path = process.env.NEXT_PUBLIC_API_PATH;
 const Home = () => {
@@ -34,23 +35,24 @@ const Home = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
-  console.log("products", products);
   return (
     <ParentContainer cartCount={cart?.cartCount || 0} activeTab={"Shop"}>
-      <div className="mx-2 my-2">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="mx-2 my-2 no-scrollbar">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 no-scrollbar">
           {products?.length &&
             products?.map((callout: any, index: number) => (
               <div
                 key={index}
-                className="max-w-xs rounded overflow-hidden shadow-lg"
+                className="max-w-xs rounded overflow-hidden shadow-lg no-scrollbar"
               >
-                <img
-                  className="w-full h-48"
-                  src={callout?.images && callout?.images[0]}
-                  alt={callout?.images && callout?.images[0]}
-                />
-                <div className="pb-1 flex flex-col text-center items-center overflow-hidden">
+                <Link href={`/product-detail/${callout._id}`}>
+                  <img
+                    className="w-full h-48"
+                    src={callout?.images && callout?.images[0]}
+                    alt={callout?.images && callout?.images[0]}
+                  />
+                </Link>
+                <div className="pb-1 flex flex-col text-center items-center overflow-hidden px-1">
                   <h2 className="mt-2 text-sm truncate overflow-hidden mx-2 w-full font-medium">
                     {callout.title}
                   </h2>

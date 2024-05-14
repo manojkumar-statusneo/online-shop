@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import StoreProvider from "./StoreProvider";
-import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
+import Providers from "@/components/ProgressBarProvider";
 export const metadata: Metadata = {
   title: "Online-Shop",
   description: "a online store",
@@ -16,13 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <StoreProvider>
         <body>
-          {children}
-          {/* <ProgressBar
-            height="4px"
-            color="#fffd00"
-            options={{ showSpinner: false }}
-            shallowRouting
-          /> */}
+          <Providers>{children}</Providers>
         </body>
       </StoreProvider>
     </html>

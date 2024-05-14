@@ -44,7 +44,7 @@ export default function Login() {
       })
       .catch((error) => console.log("errorrrr", error));
   };
-  const showToast = (type, msg) => {
+  const showToast = (type: any, msg: any) => {
     if (type === "S") {
       toast.success(msg);
     } else if (type === "F") {
