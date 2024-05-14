@@ -1,4 +1,4 @@
-import connect from "@/lib/db";
+import dbConnect from "@/lib/db";
 import Order from "@/lib/models/order";
 import { NextResponse } from "next/server";
 
@@ -6,7 +6,7 @@ export const POST = async (request: any) => {
     const { order_id, products, user, totalPrice, shippingInfo, shippingCharge,address } =
     request.body;
     try {
-        await connect(); 
+        await dbConnect();
         const order = new Order({
           order_id: order_id,
           totalPrice: totalPrice,

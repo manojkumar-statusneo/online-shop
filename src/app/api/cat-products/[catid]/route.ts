@@ -1,10 +1,10 @@
-import connect from "@/lib/db";
+import dbConnect from "@/lib/db";
 import Product from "@/lib/models/product";
 import { NextResponse } from "next/server";
 
 export const GET = async(request: Request, context: { params: any })=>{
     try {
-        await connect();
+        await dbConnect();
         const catid = context.params.catid;
         console.log(catid)
         const catData = await Product.find({ category: catid });

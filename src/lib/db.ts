@@ -1,29 +1,45 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 
 const MONGODB_URI = process.env.DB_CONNECT;
 
-const connect = async () => {
-  const connectionState = mongoose.connection.readyState;
+if (!MONGODB_URI) {
+    throw new Error(
+        "Please define the MONGODB_URI environment variable inside .env.local"
+    )
+}
 
-  if (connectionState === 1) {
-    console.log("Already connected");
-    return;
-  }
 
-  if (connectionState === 2) {
-    console.log("Connecting...");
-    return;
-  }
+let cached = global.mongoose;
 
-  try {
-    mongoose.connect(MONGODB_URI!, {
-      bufferCommands: false,
-    })
-    console.log("Connected");
-  } catch (error) {
-    console.log("Error in connecting to database", error);
-    throw new Error("Error connecting to database");
-  }
-};
+if (!cached) {
+    cached = global.mongoose = {con: null, promise: null}
+}
 
-export default connect;
+const dbConnect = async () => {
+    if (cached.conn) {
+        return cached.conn;
+    }
+
+
+// If a connection does not exist, we check if a promise is already in progress. If a promise is already in progress, we wait for it to resolve to get the connection
+    if (!cached.promise) {
+        const opts = {
+            bufferCommands : false
+        };
+
+        cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+            return mongoose
+        })
+    }
+
+    try {
+        cached.conn = await cached.promise;
+    } catch (e) {
+        cached.promise = null;
+        throw e;
+    }
+
+    return cached.conn;
+}
+
+export default dbConnect;
