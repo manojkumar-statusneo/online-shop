@@ -14,7 +14,6 @@ const path = process.env.NEXT_PUBLIC_API_PATH;
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [heroSection, setHeroSections] = useState([]);
-  const [show, setShow] = useState(true);
   const dispatch = useDispatch();
   const cart = useSelector((state: any) => state.cart);
 
@@ -50,16 +49,20 @@ const Home = () => {
     <ParentContainer cartCount={cart?.cartCount || 0} activeTab="Home">
       <HeroItems heroSection={heroSection} />
       <Category />
-      <HorizontalList
-        title="New Arrival"
-        products={products}
-        onPressCart={onPressCart}
-      />
-      <HorizontalList
-        title="On Heavy Sale"
-        products={products?.slice()?.reverse()}
-        onPressCart={onPressCart}
-      />
+      {products && (
+        <HorizontalList
+          title="New Arrival"
+          products={products}
+          onPressCart={onPressCart}
+        />
+      )}
+      {products && (
+        <HorizontalList
+          title="On Heavy Sale"
+          products={products?.slice()?.reverse()}
+          onPressCart={onPressCart}
+        />
+      )}
       <ToastContainer
         position="top-right"
         autoClose={1000}

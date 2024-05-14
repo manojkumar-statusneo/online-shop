@@ -18,7 +18,7 @@ const connect = async () => {
   try {
     mongoose.connect(MONGODB_URI!, {
       bufferCommands: false,
-    });
+    })
     console.log("Connected");
   } catch (error) {
     console.log("Error in connecting to database", error);
