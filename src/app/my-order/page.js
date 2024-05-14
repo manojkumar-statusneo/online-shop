@@ -1,8 +1,6 @@
 "use client"
-
 import { useState, useCallback, useEffect } from "react";
-import Stepper from "../../components/stepper";
-import { ArrowLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import moment from "moment";
 import { useSelector } from "react-redux";
@@ -21,7 +19,6 @@ const people = [
 export default function Myorder() {
   const router = useRouter();
   const user = useSelector((state) => state.user.user);
-  console.log("user", user);
   const [orderList, setOrderList] = useState([]);
 
   const getOrderList = () => {

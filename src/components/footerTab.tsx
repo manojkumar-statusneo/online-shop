@@ -1,34 +1,20 @@
 import React from "react";
-import { BottomSheet } from "react-spring-bottom-sheet";
 import {
-  BriefcaseIcon,
   ChevronRightIcon,
-  ChevronUpIcon,
   HomeIcon,
   ShoppingBagIcon,
-  ShoppingCartIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
 import "react-spring-bottom-sheet/dist/style.css";
 import Link from "next/link";
 
-const FooterTab = ({
-  onDismiss,
-  open,
-  setOpen,
-  router,
-  total,
-  cartCount,
-  onlyMenu,
-  activeTab,
-}: any) => {
+const FooterTab = ({ router, total, onlyMenu, activeTab }: any) => {
   return (
     <div className="lg:hidden">
       <footer
         className="bg-white
               text-center
              fixed
-             
              inset-x-0
              bottom-0 "
       >

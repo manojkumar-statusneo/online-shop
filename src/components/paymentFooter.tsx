@@ -5,7 +5,7 @@ import { LockClosedIcon } from "@heroicons/react/24/outline";
 
 const PaymentFooter = () => {
   return (
-    <div className="flex flex-1  flex-col justify-center items-center h-18 bg-white mt-4 py-6">
+    <div className="flex flex-1  flex-col justify-center items-center h-18 bg-white mt-2 py-2">
       <div className="flex flex-row gap-2">
         <Image alt="abc" src="/master.svg" height={30} width={30} />
         <Image alt="visa" src="/visa.svg" height={30} width={30} />

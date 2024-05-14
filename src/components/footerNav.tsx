@@ -2,25 +2,15 @@ import React from "react";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import {
   BriefcaseIcon,
-  CircleStackIcon,
   HomeIcon,
-  PlayCircleIcon,
   ShoppingBagIcon,
-  ShoppingCartIcon,
   UserIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import "react-spring-bottom-sheet/dist/style.css";
 import Link from "next/link";
 
-const FooterNav = ({
-  onDismiss,
-  open,
-  setOpen,
-  router,
-  total,
-  cartCount,
-}: any) => {
+const FooterNav = ({ onDismiss, cartCount, activeTab }: any) => {
   return (
     <div className="lg:hidden">
       <footer
@@ -39,25 +29,39 @@ const FooterNav = ({
           >
             <div className="flex flex-col  items-center  text-gray-900">
               <HomeIcon
-                // onClick={() => setOpen(true)}
-                className="h-6 w-6 font-bold text-slate-900"
+                className={`h-6 w-6 font-bold ${
+                  activeTab === "Home" ? "text-blue-700" : "text-slate-900"
+                }`}
                 aria-hidden="true"
               />
-              <p className="font-sans text-sm font-semibold">Home</p>
+              <p
+                className={`font-sans text-sm font-semibold ${
+                  activeTab === "Home" ? "text-blue-700" : "text-slate-900"
+                }`}
+              >
+                Home
+              </p>
             </div>
           </Link>
           <Link
-            href="/"
+            href="/home"
             className="text-sm font-medium text-gray-700 hover:text-gray-800"
           >
             <div className="flex flex-col  items-center  text-gray-900">
               <BriefcaseIcon
-                // onClick={() => setOpen(true)}
-                className="h-6 w-6 font-bold text-slate-900"
+                className={`h-6 w-6 font-bold ${
+                  activeTab === "Shop" ? "text-blue-700" : "text-slate-900"
+                }`}
                 aria-hidden="true"
               />
 
-              <p className="font-sans text-sm font-semibold">Shop</p>
+              <p
+                className={`font-sans text-sm font-semibold ${
+                  activeTab === "Shop" ? "text-blue-700" : "text-slate-900"
+                }`}
+              >
+                Shop
+              </p>
             </div>
           </Link>
           <Link
@@ -66,7 +70,6 @@ const FooterNav = ({
           >
             <div className="flex flex-col  items-center  text-gray-900 relative">
               <ShoppingBagIcon
-                // onClick={() => setOpen(true)}
                 className="h-6 w-6 font-bold text-slate-900"
                 aria-hidden="true"
               />
@@ -82,7 +85,6 @@ const FooterNav = ({
           >
             <div className="flex flex-col  items-center  text-gray-900">
               <UserIcon
-                // onClick={() => setOpen(true)}
                 className="h-6 w-6 font-bold text-slate-900"
                 aria-hidden="true"
               />
@@ -99,8 +101,8 @@ const FooterNav = ({
           </div> */}
         </div>
       </footer>
-      {/* <BottomSheet
-        open={true}
+      <BottomSheet
+        open={false}
         onDismiss={onDismiss}
         defaultSnap={({ maxHeight }) => maxHeight * 0.8}
         snapPoints={({ maxHeight }) => maxHeight * 0.35}
@@ -119,7 +121,7 @@ const FooterNav = ({
               <input
                 className="appearance-none block w-full bg-white text-slate-900 leading-tight focus:outline-none focus:bg-white"
                 id="grid-first-name"
-                type="number"
+                type="tel"
                 placeholder="Mobile Number"
                 onChange={(e) => console.log(e.target.value)}
                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
@@ -133,7 +135,7 @@ const FooterNav = ({
             Send OTP
           </button>
         </div>
-      </BottomSheet> */}
+      </BottomSheet>
       <BottomSheet
         open={false}
         onDismiss={onDismiss}

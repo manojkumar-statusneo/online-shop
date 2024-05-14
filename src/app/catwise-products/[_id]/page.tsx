@@ -1,54 +1,82 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getCatWiseProducts } from "@/services/productServices";
 import ParentContainer from "@/components/parentContainer";
+import { useEffect, useState } from "react";
+import { addToCart } from "@/lib/slices/cartSlice";
+import { toast } from "react-toastify";
+import DetailHeader from "@/components/detailHeader";
+import { useSearchParams } from "next/navigation";
 
-const externaImageLoader = ({ src }: any) => `${src}`;
-
-const CatWiseProducts = async ({ params }: any) => {
-  const catInfo = await getCatWiseProducts(params?._id);
+const CatWiseProducts = ({ params }: any) => {
+  const searchParams = useSearchParams();
+  console.log("searchParams", searchParams);
+  const [productList, setProductList] = useState<any>([]);
+  const dispatch = useDispatch();
   const cart = useSelector((state: any) => state.cart);
-  console.log("ID****", catInfo);
-
+  const onPressCart = (item: any) => {
+    dispatch(addToCart(item));
+    toast.success("Item added to cart");
+  };
+  const fetchDetails = async () => {
+    const catInfo = await getCatWiseProducts(params?._id);
+    console.log("catInfo", catInfo);
+    setProductList(catInfo?.data);
+  };
+  useEffect(() => {
+    fetchDetails();
+  }, []);
   return (
-    <ParentContainer cartCount={cart?.cartCount || 0}>
-      <div className="container mx-auto mt-8">
-        <div className="flex flex-wrap -mx-4">
-          {catInfo.map((callout: any) => (
+    <>
+      <DetailHeader
+        cartCount={cart?.cartCount || 0}
+        title={searchParams.get("search")}
+      />
+
+      <div className="container px-2 mt-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {productList.map((callout: any, index: number) => (
             <div
-              key={callout._id}
-              className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 px-4 mb-8"
+              key={index}
+              className="max-w-xs rounded overflow-hidden shadow-lg"
             >
-              {/* <Link href={"/product-detail"}> */}
               <Link href={`/product-detail/${callout._id}`}>
-                <div className="min-w-full overflow-hidden  sm:aspect-w-1 lg:aspect-h-1 lg:aspect-w-1">
-                  <Image
-                    loader={externaImageLoader}
-                    fill
-                    src={callout?.images && callout?.images[0]}
-                    alt={callout?.images && callout?.images[0]}
-                  />
-                </div>
+                <img
+                  className="w-full h-48"
+                  src={callout?.images && callout?.images[0]}
+                  alt={callout?.images && callout?.images[0]}
+                />
               </Link>
-              <div className=" pb-1 flex flex-col text-center items-center">
-                <h3 className="mt-2 text-md text-gray-500">{callout.title}</h3>
-                <h3 className=" text-md text-slate-950">{`₹${callout.price}`}</h3>
+              <div className="pb-1 flex flex-col text-center items-center overflow-hidden">
+                <h2 className="mt-2 text-sm truncate overflow-hidden mx-2 w-full font-medium">
+                  {callout.title}
+                </h2>
+                <div className="flex flex-row items-center">
+                  <h3 className="text-sm font-medium">{`₹${callout.price}`}</h3>
+                  <h3 className=" text-xs line-through pl-1 text-gray-800 italic">{`₹${Number(
+                    Number(callout.price) + 100
+                  )}`}</h3>
+                  <h3 className=" text-xs pl-1  text-green-800">
+                    {"(33% off)"}
+                  </h3>
+                </div>
+
                 <button
-                  className="text-sm  justify-center items-center py-1 flex self-center my-1 w-32 border border-slate-400 bg-white"
-                  // onClick={() => {
-                  //   props.onPressCart(callout);
-                  // }}
+                  className="text-xs justify-center items-center py-2 flex self-center my-1 w-full border rounded-md border-slate-900 bg-white"
+                  onClick={() => {
+                    onPressCart(callout);
+                  }}
                 >
-                  ADD TO CART
+                  Add to cart
                 </button>
               </div>
             </div>
           ))}
         </div>
       </div>
-    </ParentContainer>
+    </>
   );
 };
 export default CatWiseProducts;

@@ -4,7 +4,6 @@ import { Carousel } from "react-responsive-carousel";
 import Image from "next/image";
 const externaImageLoader = ({ src }: any) => `${src}`;
 const HeroItems = ({ heroSection }: any) => {
-  console.log("heroSection", heroSection);
   return (
     <Carousel
       // autoPlay
@@ -18,8 +17,8 @@ const HeroItems = ({ heroSection }: any) => {
       showIndicators={true}
       transitionTime={500}
     >
-      {heroSection?.map((item: any) => (
-        <div className="h-72 px-2 lg:h-96">
+      {heroSection?.map((item: any, index: number) => (
+        <div className="h-72 px-2 lg:h-96" key={index}>
           <Image src={item?.image} loader={externaImageLoader} alt="1" fill />
         </div>
       ))}

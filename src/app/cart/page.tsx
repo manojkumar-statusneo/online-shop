@@ -137,7 +137,7 @@ export default function Cart() {
               <div className="flex px-3 py-3 text-base font-normal text-gray-900">
                 <h2 className="text-slate-700 font-sans text-sm">
                   {" "}
-                  Avarage delivery time{" "}
+                  Average delivery time{" "}
                   <span className="font-semibold"> 6-7 days</span>
                 </h2>
               </div>

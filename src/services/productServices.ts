@@ -12,7 +12,7 @@ export async function fetchProductDetail(productId: string) {
 
 export async function getCatWiseProducts(catId: string) {
   try {
-    const res = await fetch(`${path}/api/cat-products/products/bycatid/${catId}`);
+    const res = await fetch(`${path}/api/cat-products/${catId}`);
     const response = await res.json();
     return response;
   } catch (error) {

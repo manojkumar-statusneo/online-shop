@@ -15,7 +15,6 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [heroSection, setHeroSections] = useState([]);
   const [show, setShow] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const dispatch = useDispatch();
   const cart = useSelector((state: any) => state.cart);
 
@@ -48,12 +47,17 @@ const Home = () => {
   }, []);
 
   return (
-    <ParentContainer cartCount={cart?.cartCount || 0}>
+    <ParentContainer cartCount={cart?.cartCount || 0} activeTab="Home">
       <HeroItems heroSection={heroSection} />
       <Category />
       <HorizontalList
         title="New Arrival"
         products={products}
+        onPressCart={onPressCart}
+      />
+      <HorizontalList
+        title="On Heavy Sale"
+        products={products?.slice()?.reverse()}
         onPressCart={onPressCart}
       />
       <ToastContainer

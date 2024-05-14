@@ -40,15 +40,14 @@ const HorizontalList = (props: any) => {
   //     router.beforePopState(() => true);
   //   };
   // }, [router]);
-
   return (
     <div className="px-4 relative sm:px-6 lg:px-4 pb-4">
       <div className="max-w-2xl sm:py-2 lg:max-w-none lg:py-8">
-        <h2 className="my-2 text-2xl text-center text-gray-900 font-normal">
+        <h2 className="text-2xl py-2 text-center text-gray-900 lg:text-3xl">
           {props?.title}
         </h2>
       </div>
-      <div className="my-4 lg:my-6 ">
+      <div className="my-4 lg:my-1">
         <Carousel
           swipeable={true}
           draggable={false}
