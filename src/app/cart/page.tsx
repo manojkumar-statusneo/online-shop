@@ -6,12 +6,10 @@ import {
   MinusIcon,
   PlusIcon,
   ChevronRightIcon,
-  LockClosedIcon,
 } from "@heroicons/react/24/outline";
 import "react-spring-bottom-sheet/dist/style.css";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import FooterNav from "@/components/footerNav";
 import { addToCart, removeToCart } from "@/lib/slices/cartSlice";
 import FooterTab from "@/components/footerTab";
 import Image from "next/image";
@@ -35,9 +33,9 @@ export default function Cart() {
   };
 
   return (
-    <div className="bg-slate-50 flex-1 flex-col h-screen">
-      <div className="flex items-start p-2  bg-white sticky top-0 z-50 h-12">
-        <div className="ml-1 flex h-7 items-center">
+    <div className="bg-slate-50 flex-1 flex-col flex-grow pb-36">
+      <div className="flex items-start p-2  bg-white sticky top-0 z-50 h-12 justify-between flex-1">
+        <div className="ml-1 flex h-7 items-center ">
           <button
             type="button"
             className="z-50 px-2 text-gray-400"
@@ -48,13 +46,16 @@ export default function Cart() {
             <span className="sr-only">Close panel</span>
             <ArrowLeftIcon className="h-6 w-5 text-black" aria-hidden="true" />
           </button>
+          <h1 className="font-normal">Shopping Bag</h1>
         </div>
-        <h1 className="font-normal"> Shopping cart</h1>
+        <div className="flex items-center h-7">
+          <h1 className="font-normal text-sm"> STEP 1/3</h1>
+        </div>
       </div>
-      <div className=" flex flex-col w-full lg:flex lg:flex-1 lg:px-10 mt-6 ">
+      <div className="flex flex-col w-full lg:flex lg:flex-1 lg:px-10 my-2">
         {cart?.cartCount > 0 ? (
-          <div className="flex flex-col bg-white  lg:flex-row flex-grow">
-            <div className="mt-8 px-3 lg:flex flex-1">
+          <div className="flex flex-col lg:flex-row">
+            <div className="mt-8 px-3 lg:flex flex-1 bg-white">
               <div className="flow-root lg:flex flex-1 ">
                 <ul role="list" className="my-2 lg:flex-1">
                   {cart?.cartProducts.map((product: any) => (
@@ -118,40 +119,64 @@ export default function Cart() {
                 </ul>
               </div>
             </div>
-            <div className="my-6 p-2 flex flex-col divide-y divide-dashed lg:w-1/3 ">
+            <div className="p-4 mt-2 bg-white flex flex-col justify-center">
+              <div className="flex item-center mb-2">
+                <Image alt="abc" src="/discount.png" width={30} height={30} />
+                <h2 className="items-baseline  font-normal pt-1 ">
+                  Coupons and offers
+                </h2>
+              </div>
+
+              <div className="flex">
+                <input
+                  type="text"
+                  placeholder="Enter coupon code"
+                  className="appearance-none block w-64 bg-white text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                />
+                <button className="bg-slate-900 px-2 h-11 w-32 rounded text-base font-medium text-white shadow-sm ml-2">
+                  Apply
+                </button>
+              </div>
+            </div>
+            <div className="mt-2 p-4 flex flex-col divide-y divide-dashed lg:w-1/3 bg-white ">
               <div>
-                <div className="flex py-1 justify-between items-baseline text-base font-normal text-gray-900">
-                  <h2>Subtotal</h2>
-                  <h2>₹{cart?.total}</h2>
+                <div className="flex py-1 justify-between items-baseline  text-slate-900">
+                  <h2 className="text-sm">Item total</h2>
+                  <div className="flex items-center">
+                    <h3 className=" text-xs line-through pl-1 text-gray-600 italic">{`₹${Number(
+                      Number(cart?.total) + 100
+                    )}`}</h3>
+                    <h3 className="text-sm pl-1 text-slate-900 italic">{`₹${Number(
+                      cart?.total
+                    )}`}</h3>
+                  </div>
                 </div>
-                <div className="flex pb-2 justify-between items-baseline text-base font-normal text-gray-900">
-                  <h2>Delivery fee</h2>
-                  <h2>₹2.00</h2>
+                <div className="flex pb-2 justify-between items-baseline  text-gray-900">
+                  <h2 className="text-sm">Delivery fee</h2>
+                  <h2 className="text-sm pl-1 text-slate-900 italic">₹2.00</h2>
                 </div>
               </div>
 
               <div className="flex  py-2 justify-between items-baseline  font-base font-medium text-gray-900">
-                <h2 className="font-sans"> Grand total</h2>
-                <h2>₹ {parseInt(cart?.total + 2)}</h2>
+                <h2 className="text-sm"> Grand Total</h2>
+                <h2 className="text-sm italic">₹{parseInt(cart?.total + 2)}</h2>
               </div>
-              <div className="flex px-3 py-3 text-base font-normal text-gray-900">
+              <div className="flex  py-3 text-base font-normal text-gray-900">
                 <h2 className="text-slate-700 font-sans text-sm">
-                  {" "}
-                  Average delivery time{" "}
+                  Average delivery time
                   <span className="font-semibold"> 6-7 days</span>
                 </h2>
               </div>
-              <div className="flex  mx-3 bg-green-100 rounded-sm justify-center p-1 text-base font-normal text-gray-900 ">
-                <h2 className="text-green-500">
-                  {" "}
-                  ₹26 saved so far on this order{" "}
-                </h2>
+              <div className="flex  bg-green-100 rounded-sm justify-center h-8 items-center">
+                <h3 className="text-green-500 mb-[2px]">
+                  ₹26 saved so far on this order
+                </h3>
               </div>
               <div
                 onClick={(e) => {
                   router.push("/checkout");
                 }}
-                className="hidden cursor-pointer mx-3 lg:flex flex-1 gap-1 items-center justify-center border border-transparent bg-slate-800 px-2 py-3 text-base font-medium text-white shadow-sm hover:bg-slate-900 my-2"
+                className="hidden cursor-pointer mx-3 lg:flex flex-1 gap-1 items-center justify-center border border-transparent bg-slate-900 px-2 py-3 text-base font-medium text-white shadow-sm hover:bg-slate-900 my-2"
               >
                 <h1 className="text-base">Checkout</h1>
                 <ChevronRightIcon className="h-6 w-4" aria-hidden="true" />
@@ -159,7 +184,7 @@ export default function Cart() {
             </div>
           </div>
         ) : (
-          <div className="flex h-screen  mt-10 flex-col  items-center text-center">
+          <div className="flex h-screen  my-2 flex-col  items-center text-center">
             <p className="font-medium text-2xl text-gray-600">
               {" "}
               Cart is empty{" "}

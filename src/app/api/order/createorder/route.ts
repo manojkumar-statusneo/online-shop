@@ -4,20 +4,20 @@ import { NextResponse } from "next/server";
 
 export const POST = async (request: any) => {
     const { order_id, products, user, totalPrice, shippingInfo, shippingCharge,address } =
-    request.body;
+    await request.json();
     try {
         await dbConnect();
         const order = new Order({
           order_id: order_id,
           totalPrice: totalPrice,
-          user: user,
+          user: '62d77350bf3b735cc5c407d2',
           products: products,
           address:address,
           shippingCharge: shippingCharge,
           shippingInfo: shippingInfo,
         });
         const savedOrder = await order.save();
-        return NextResponse.json({msg:'order placed successfully',data:savedOrder})
+        return NextResponse.json({msg:'order placed successfully',data:savedOrder,status:200})
     } catch (error) {
         return NextResponse.json({error:error})
     }

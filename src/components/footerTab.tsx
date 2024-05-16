@@ -12,21 +12,25 @@ const FooterTab = ({ router, total, onlyMenu, activeTab }: any) => {
   return (
     <div className="lg:hidden">
       <footer
-        className="bg-white
+        className="
               text-center
              fixed
              inset-x-0
-             bottom-0 "
+             bottom-0"
       >
         {!onlyMenu && (
           <div
             className="mt-2 flex justify-between px-2 py-2 border
-             border-b-[0.5px]"
+             border-b-[0.5px] bg-white"
           >
             <div className="flex flex-1 items-center gap-2">
-              <div className="flex items-baseline  text-gray-900">
-                <p className="text-sm">Total: </p>
-                <p className="text-sm">₹{total}</p>
+              <div className="flex items-baseline flex-col">
+                <h3 className="text-xs font-medium text-blue-800 italic">
+                  Payable Amount{" "}
+                </h3>
+                <h2 className="font-medium text-slate-900 italic text-lg">
+                  ₹{total?.toLocaleString()}
+                </h2>
               </div>
             </div>
             <div
@@ -35,14 +39,14 @@ const FooterTab = ({ router, total, onlyMenu, activeTab }: any) => {
               }}
               className="cursor-pointer flex flex-1 gap-1 items-center justify-center border border-transparent bg-slate-800 px-2 py-2 text-base font-medium text-white shadow-sm hover:bg-slate-900 rounded-md"
             >
-              <h1 className="text-sm">Continue</h1>
+              <h1 className="text-md">Checkout</h1>
               <ChevronRightIcon className="h-6 w-4" aria-hidden="true" />
             </div>
           </div>
         )}
         <div
-          className="mt-2 flex justify-between px-2 items-center w-full gap-4 pb-2 border
-             border-t-[0.5px] pt-1"
+          className="pt-1 flex justify-between px-2 items-center w-full gap-4 pb-2 border
+             border-t-[0.5px] bg-white"
         >
           <Link
             href="/"
