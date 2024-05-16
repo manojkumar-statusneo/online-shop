@@ -11,7 +11,7 @@ import useRazorpay from "react-razorpay";
 import { useDispatch, useSelector } from "react-redux";
 import { resetCart } from "@/lib/slices/cartSlice";
 import Stepper from "@/components/stepper";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import PaymentFooter from "@/components/paymentFooter";
 import Image from "next/image";
 import Accordion from "@/components/accordion";
@@ -187,6 +187,9 @@ export default function Payment() {
             },
           },
         },
+        redirect: true,
+        callback_url:
+          "https://online-shop-git-master-manoj-sonis-projects.vercel.app/payment",
       };
       const rzpay = new Razorpay(options as any);
       rzpay.on("payment.failed", function (response: any) {

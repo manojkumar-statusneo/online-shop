@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Success() {
   return (
     <div className="flex h-screen  flex-col justify-center items-center text-center">
-      <Image src="/success.gif" alt="1" height={100} width={100} />
+      <Image src="/success.gif" alt="1" height={100} width={100} unoptimized />
       <p className="font-medium text-2xl mt-2"> Order place successfully</p>
       <p className="font-normal text-sm text-gray-600">
         Click below button to go back to home
