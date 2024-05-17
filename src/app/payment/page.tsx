@@ -151,45 +151,44 @@ export default function Payment() {
         theme: {
           color: "#0f172a",
         },
-        config: {
-          display: {
-            blocks: {
-              banks: {
-                name: "Pay via UPI",
-                instruments: [
-                  {
-                    method: "upi",
-                    apps: ["google_pay"],
-                  },
-                  {
-                    method: "upi",
-                    apps: ["paytm"],
-                  },
-                  {
-                    method: "upi",
-                    apps: ["phonepay"],
-                  },
-                ],
-              },
-              cards: {
-                name: "Pay via Cards",
-                instruments: [
-                  {
-                    method: "card",
-                  },
-                ],
-              },
-            },
+        // config: {
+        //   display: {
+        //     blocks: {
+        //       banks: {
+        //         name: "Pay via UPI",
+        //         instruments: [
+        //           {
+        //             method: "upi",
+        //             apps: ["google_pay"],
+        //           },
+        //           {
+        //             method: "upi",
+        //             apps: ["paytm"],
+        //           },
+        //           {
+        //             method: "upi",
+        //             apps: ["phonepay"],
+        //           },
+        //         ],
+        //       },
+        //       cards: {
+        //         name: "Pay via Cards",
+        //         instruments: [
+        //           {
+        //             method: "card",
+        //           },
+        //         ],
+        //       },
+        //     },
 
-            sequence: ["upi", "block.cards"],
-            preferences: {
-              show_default_blocks: false,
-            },
-          },
-        },
-        redirect: true,
-        callback_url:
-          "https://online-shop-git-master-manoj-sonis-projects.vercel.app/payment",
+        //     sequence: ["upi", "block.cards"],
+        //     preferences: {
+        //       show_default_blocks: true,
+        //     },
+        //   },
+        // },
+        //redirect: true,
+        // callback_url: `/success`,
       };
       const rzpay = new Razorpay(options as any);
       rzpay.on("payment.failed", function (response: any) {
