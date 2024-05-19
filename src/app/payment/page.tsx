@@ -144,7 +144,7 @@ export default function Payment() {
             body: JSON.stringify(data),
           });
           console.log("verify result", result);
-          if (result?.isOk) {
+          if (result?.ok) {
             saveOrder(response.razorpay_order_id);
           }
         },
