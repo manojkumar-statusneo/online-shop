@@ -23,13 +23,13 @@ export default function Category() {
 
   return (
     <div>
-      <div className="px-4 sm:px-6 lg:px-4 pt-0 ">
+      <div className="sm:px-6 lg:px-20 pt-0">
         <div className="mx-auto max-w-2xl sm:py-2 lg:max-w-none lg:py-8">
           <h2 className="text-2xl py-2 text-center text-gray-900 lg:text-3xl">
             Shop By Category
           </h2>
 
-          <div className=" no-scrollbar flex overflow-x-auto space-x-4 p-4 lg:flex gap-2 justify-between">
+          <div className="no-scrollbar flex overflow-x-auto space-x-4 py-4 mx-2 lg:flex gap-2 justify-between">
             {catList?.map((callout: any, index: number) => (
               <Link
                 key={callout.name}

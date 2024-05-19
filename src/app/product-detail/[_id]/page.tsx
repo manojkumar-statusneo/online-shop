@@ -1,5 +1,8 @@
 "use client";
 import { StarIcon } from "@heroicons/react/20/solid";
+
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from "react-responsive-carousel";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,7 +11,6 @@ import { addToCart } from "@/lib/slices/cartSlice";
 import { useEffect, useState } from "react";
 import DetailHeader from "@/components/detailHeader";
 import Navbar from "@/components/nav-bar";
-
 const reviews = { href: "#", average: 4, totalCount: 117 };
 
 function classNames(...classes: any) {
@@ -17,6 +19,7 @@ function classNames(...classes: any) {
 
 export default function ProductDetail({ params }: any) {
   const [productInfo, setProductInfo] = useState<any>({});
+  console.log("productInfo", productInfo);
   const dispatch = useDispatch();
   const cart = useSelector((state: any) => state.cart);
   const fetchDetails = async () => {
@@ -27,7 +30,6 @@ export default function ProductDetail({ params }: any) {
   useEffect(() => {
     fetchDetails();
   }, []);
-
   const onPressCart = () => {
     dispatch(addToCart(productInfo));
     toast.success("Item added to cart");
@@ -45,45 +47,73 @@ export default function ProductDetail({ params }: any) {
       </div>
 
       {/* Image gallery */}
-      <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
-        <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
-          {productInfo?.images?.length && (
-            <img
-              src={productInfo?.images[0]}
-              className="h-full w-full object-cover object-center"
-            />
-          )}
+      <div className="mx-auto mt-0 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
+        <div className="aspect-w-full hidden overflow-hidden rounded-lg lg:block">
+          <Carousel
+            showStatus={false}
+            renderThumbs={(children: any) => {
+              return children?.map((item: any) => (
+                <img
+                  src={item?.props?.children?.props?.src}
+                  className="h-20 w-full object-fill"
+                />
+              ));
+            }}
+            renderIndicator={() => null}
+          >
+            <div className="aspect-h-3  aspect-w-3 overflow-hidden">
+              {productInfo?.images?.length && (
+                <img
+                  src={productInfo?.images[0]}
+                  className="h-full w-full object-fill"
+                />
+              )}
+            </div>
+            <div className="aspect-h-3 aspect-w-3 overflow-hidden">
+              {productInfo?.images?.length && (
+                <img
+                  src={productInfo?.images[0]}
+                  className="h-full w-full object-fill"
+                />
+              )}
+            </div>
+          </Carousel>
         </div>
-        <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
-          <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-            {productInfo?.images?.length && (
-              <img
-                src={productInfo?.images[0]}
-                className="h-full w-full object-cover object-center"
-              />
-            )}
-          </div>
-          <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-            {productInfo?.images?.length && (
-              <img
-                src={productInfo?.images[0]}
-                className="h-full w-full object-cover object-center"
-              />
-            )}
-          </div>
-        </div>
-        <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
-          {productInfo?.images?.length && (
-            <img
-              src={productInfo?.images[0]}
-              className="h-full w-full object-cover object-center"
-            />
-          )}
+        <div className="lg:hidden">
+          <Carousel
+            showStatus={false}
+            renderThumbs={(children: any) => {
+              return children?.map((item: any) => (
+                <img
+                  src={item?.props?.children?.props?.src}
+                  className="h-20 w-full object-fill"
+                />
+              ));
+            }}
+            renderIndicator={() => null}
+          >
+            <div className="aspect-h-3  aspect-w-3 overflow-hidden">
+              {productInfo?.images?.length && (
+                <img
+                  src={productInfo?.images[0]}
+                  className="h-full w-full object-fill"
+                />
+              )}
+            </div>
+            <div className="aspect-h-3 aspect-w-3 overflow-hidden">
+              {productInfo?.images?.length && (
+                <img
+                  src={productInfo?.images[0]}
+                  className="h-full w-full object-fill"
+                />
+              )}
+            </div>
+          </Carousel>
         </div>
       </div>
 
       {/* Product info */}
-      <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
+      <div className="mx-auto max-w-2xl px-4 pb-16 pt-2 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
         <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
             {productInfo?.title}

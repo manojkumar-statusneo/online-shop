@@ -1,5 +1,4 @@
 import mongoose from "mongoose"
-
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
@@ -17,6 +16,7 @@ if (!cached) {
 
 const dbConnect = async () => {
     if (cached.conn) {
+        console.log("connected cached")
         return cached.conn;
     }
 
@@ -25,7 +25,7 @@ const dbConnect = async () => {
     if (!cached.promise) {
         const opts = {
             bufferCommands : false,
-             useNewUrlParser: true 
+            
         };
 
         cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
@@ -35,6 +35,7 @@ const dbConnect = async () => {
 
     try {
         cached.conn = await cached.promise;
+        console.log("db connected")
     } catch (e) {
         cached.promise = null;
         throw e;

@@ -1,27 +1,6 @@
-import React, { useEffect } from "react";
-import Image from "next/image";
+import React from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 4,
-    slidesToSlide: 4, // optional, default to 1.
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 3,
-    slidesToSlide: 3, // optional, default to 1.
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 2,
-    slidesToSlide: 2, // optional, default to 1.
-  },
-};
-const externaImageLoader = ({ src }: any) => `${src}`;
 
 const HorizontalList = (props: any) => {
   const router = useRouter();
@@ -41,40 +20,27 @@ const HorizontalList = (props: any) => {
   //   };
   // }, [router]);
   return (
-    <div className="px-4 relative sm:px-6 lg:px-4 pb-4">
+    <div className="px-4 relative sm:px-6 lg:mx-20 pb-4">
       <div className="max-w-2xl sm:py-2 lg:max-w-none lg:py-8">
         <h2 className="text-2xl py-2 text-center text-gray-900 lg:text-3xl">
           {props?.title}
         </h2>
       </div>
       <div className="my-4 lg:my-1">
-        <Carousel
-          swipeable={true}
-          draggable={false}
-          //showDots={true}
-          responsive={responsive}
-          ssr={true} // means to render carousel on server-side.
-          infinite={false}
-          transitionDuration={700}
-          containerClass="carousel-container"
-          removeArrowOnDeviceType={["tablet", "mobile"]}
-          dotListClass="custom-dot-list-style"
-          itemClass="carousel-item"
-          //renderDotsOutside={true}
-        >
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 no-scrollbar">
           {props?.products?.map((callout: any) => (
-            <div key={callout._id} className="mx-2 items-center ">
+            <div
+              key={callout?._id}
+              className="max-w-xs rounded overflow-hidden shadow-lg no-scrollbar lg:h-80 flex flex-col"
+            >
               <Link href={`/product-detail/${callout._id}`}>
-                <div className=" relative h-48  min-w-full overflow-hidden  sm:aspect-w-1 lg:aspect-h-1 lg:aspect-w-1">
-                  <Image
-                    loader={externaImageLoader}
-                    fill
-                    src={callout?.images && callout?.images[0]}
-                    alt={callout?.images && callout?.images[0]}
-                  />
-                </div>
+                <img
+                  className="w-full h-48 lg:h-56"
+                  src={callout?.images && callout?.images[0]}
+                  alt={callout?.images && callout?.images[0]}
+                />
               </Link>
-              <div className="pb-1 flex flex-col text-center items-center overflow-hidden">
+              <div className="pb-1 flex flex-col text-center items-center overflow-hidden px-1">
                 <h2 className="mt-2 text-sm truncate overflow-hidden mx-2 w-full font-medium">
                   {callout.title}
                 </h2>
@@ -91,7 +57,7 @@ const HorizontalList = (props: any) => {
                 <button
                   className="text-xs justify-center items-center py-2 flex self-center my-1 w-full border rounded-md border-slate-900 bg-white"
                   onClick={() => {
-                    props.onPressCart(callout);
+                    props?.onPressCart(callout);
                   }}
                 >
                   Add to cart
@@ -99,7 +65,7 @@ const HorizontalList = (props: any) => {
               </div>
             </div>
           ))}
-        </Carousel>
+        </div>
       </div>
     </div>
   );
