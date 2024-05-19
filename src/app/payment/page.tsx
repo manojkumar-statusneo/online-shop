@@ -143,8 +143,8 @@ export default function Payment() {
             method: "POST",
             body: JSON.stringify(data),
           });
-
-          if (result?.statusText == "OK") {
+          console.log("verify result", result);
+          if (result?.isOk) {
             saveOrder(response.razorpay_order_id);
           }
         },
