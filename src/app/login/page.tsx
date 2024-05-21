@@ -1,7 +1,7 @@
 "use client";
 import FooterTab from "@/components/footerTab";
-import { saveUser } from "@/lib/slices/userSlice";
-
+import { logOut, saveUser } from "@/lib/slices/userSlice";
+import {} from "cookie";
 import {
   ArrowLeftIcon,
   ListBulletIcon,
@@ -9,14 +9,17 @@ import {
   ArrowLeftEndOnRectangleIcon,
   MapPinIcon,
 } from "@heroicons/react/24/outline";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
+  const user = useSelector((state: any) => state.user?.user);
+  console.log("user", user);
   const router = useRouter();
   const dispach = useDispatch();
   const [email, setEmail] = useState("test@gmail.com");
@@ -24,25 +27,16 @@ export default function Login() {
 
   const onPressLogin = async () => {
     const path = process.env.NEXT_PUBLIC_API_PATH;
-    await fetch(`${path}/api/user/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    })
+    await fetch(`${path}/api/session/clear`)
       .then((t) => t.json())
       .then((res) => {
-        if (res.status === "S") {
-          dispach(saveUser(res?.data));
-          showToast("S", '"Login SuccessFully"');
-          router.replace("/");
+        if (res.status === 200) {
+          onLogout();
         } else {
           showToast("F", res.msg);
         }
       })
-      .catch((error) => console.log("errorrrr", error));
+      .catch((error) => console.log("sesion clear", error));
   };
   const showToast = (type: any, msg: any) => {
     if (type === "S") {
@@ -50,6 +44,10 @@ export default function Login() {
     } else if (type === "F") {
       toast.error(msg);
     }
+  };
+  const onLogout = () => {
+    dispach(logOut());
+    router.replace("/");
   };
   return (
     <div>
@@ -68,7 +66,7 @@ export default function Login() {
         </div>
         <div className="flex flex-row justify-between w-full pr-2">
           <h1 className="font-normal"> Account</h1>
-          <h1 className="font-semibold"> +91852991516</h1>
+          <h1 className="font-semibold"> {user?.mobile}</h1>
         </div>
       </div>
       <div className="mx-2">
@@ -81,15 +79,15 @@ export default function Login() {
             <ChevronRightIcon className="h-6 w-6 text-gray-500" />
           </div>
         </Link>
-        <div className="flex flex-row justify-between w-full  border-b-[1px] border-gray-100 py-2.5">
+        <div className="flex flex-row justify-between w-full  border-b-[1px] border-gray-100 py-2.5 cursor-pointer">
           <div className="flex flex-row ">
             <MapPinIcon className="h-6 w-5 text-gray-500" />
             <h1 className="font-normal ml-2"> Addresses</h1>
           </div>
           <ChevronRightIcon className="h-6 w-6 text-gray-500" />
         </div>
-        <div className="flex flex-row justify-between w-full  border-b-[1px] border-gray-100 py-2.5">
-          <div className="flex flex-row ">
+        <div className="flex flex-row justify-between w-full  border-b-[1px] border-gray-100 py-2.5 cursor-pointer">
+          <div className="flex flex-row" onClick={onPressLogin}>
             <ArrowLeftEndOnRectangleIcon className="h-6 w-5 text-gray-500" />
             <h1 className="font-normal ml-2">Logout</h1>
           </div>

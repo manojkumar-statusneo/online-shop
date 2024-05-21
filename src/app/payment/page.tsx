@@ -61,6 +61,7 @@ export default function Payment() {
   const Razorpay = useRazorpay();
   const cart = useSelector((state: any) => state.cart);
   const user = useSelector((state: any) => state.user.user);
+  console.log("payment user", user);
   const [selectedOption, setSelectedOption] = useState("Phone Pay");
 
   const saveOrder = (order_id: string) => {
@@ -79,7 +80,7 @@ export default function Payment() {
 
       body: JSON.stringify({
         order_id: order_id,
-        user: user,
+        user: user?._id,
         totalPrice: cart?.total,
         products: cart?.cartProducts,
         shippingInfo,

@@ -10,7 +10,7 @@ export const POST = async (request: any) => {
         const order = new Order({
           order_id: order_id,
           totalPrice: totalPrice,
-          user: '62d77350bf3b735cc5c407d2',
+          user: user,
           products: products,
           address:address,
           shippingCharge: shippingCharge,

@@ -1,8 +1,11 @@
 "use client";
+import { setCookiesState } from "@/lib/slices/cartSlice";
 import { AppStore, makeStore } from "@/lib/store";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Provider } from "react-redux";
 
+import { saveUser } from "@/lib/slices/userSlice";
+const path = process.env.NEXT_PUBLIC_API_PATH;
 export default function StoreProvider({
   children,
 }: {
@@ -13,6 +16,28 @@ export default function StoreProvider({
     // Create the store instance the first time this renders
     storeRef.current = makeStore();
   }
+  const getSession = async () => {
+    try {
+      const res = await fetch(`${path}/api/session`);
+      const response = await res.json();
+      if (response?.data && Object.keys(response?.data)?.length > 0) {
+        storeRef?.current?.dispatch(saveUser(response?.data));
+      } else {
+      }
+    } catch (error) {
+      console.log("session eroor", error);
+    }
+  };
+  const getCart = () => {
+    const cartData = JSON.parse(localStorage.getItem("cart"));
+    if (cartData) {
+      storeRef?.current?.dispatch(setCookiesState(cartData));
+    }
+  };
+  useEffect(() => {
+    getSession();
+    getCart();
+  }, []);
 
   return <Provider store={storeRef.current}>{children}</Provider>;
 }

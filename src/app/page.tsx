@@ -1,7 +1,7 @@
 "use client";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ParentContainer from "@/components/parentContainer";
@@ -12,10 +12,10 @@ import HorizontalList from "@/components/horizontal-list";
 
 const path = process.env.NEXT_PUBLIC_API_PATH;
 const Home = () => {
+  const cart = useSelector((state: any) => state.cart);
   const [products, setProducts] = useState([]);
   const [heroSection, setHeroSections] = useState([]);
   const dispatch = useDispatch();
-  const cart = useSelector((state: any) => state.cart);
 
   const onPressCart = (item: any) => {
     dispatch(addToCart(item));
@@ -44,7 +44,6 @@ const Home = () => {
     fetchHeroSection();
     fetchProducts();
   }, []);
-
   return (
     <ParentContainer cartCount={cart?.cartCount || 0} activeTab="Home">
       <HeroItems heroSection={heroSection} />

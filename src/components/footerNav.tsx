@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import {
   BriefcaseIcon,
@@ -9,8 +9,125 @@ import {
 } from "@heroicons/react/24/outline";
 import "react-spring-bottom-sheet/dist/style.css";
 import Link from "next/link";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { firebaseAuth } from "@/lib/firebase/config";
+import { saveUser } from "@/lib/slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+var recaptchaVerifier = null as any;
 
-const FooterNav = ({ onDismiss, cartCount, activeTab }: any) => {
+const FooterNav = ({ cartCount, activeTab }: any) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.user.user);
+  const isLoggedIn = user?.mobile ? true : false;
+
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [verificationResult, setVerificationResult] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showOtpScreen, setShowOtpScreen] = useState(false);
+  const itemsRef = useRef([]);
+  const onDismiss = () => {
+    setShowMenu(false);
+  };
+  const onVerifyOtp = () => {
+    if (verificationResult) {
+      verificationResult
+        .confirm(verificationCode)
+        .then((result: any) => {
+          // User signed in successfully.
+          console.log("otp verify response ", result?.user?.phoneNumber);
+          console.log("otp verify response ", result?.user?.uid);
+
+          login(result?.user?.phoneNumber, result?.user?.uid);
+          // ...
+        })
+        .catch((error) => {
+          console.log("error otp verify", error);
+        });
+    }
+  };
+
+  const verifyRecaptcha = () => {
+    recaptchaVerifier = new RecaptchaVerifier(
+      firebaseAuth,
+      "recaptcha-container",
+      {
+        size: "invisible",
+        callback: function (response: any) {
+          console.log("response", response);
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+        },
+      }
+    );
+  };
+  const handleSendOTP = async () => {
+    verifyRecaptcha();
+    try {
+      const confirmation = await signInWithPhoneNumber(
+        firebaseAuth,
+        `+91${phoneNumber}`,
+        recaptchaVerifier
+      );
+      console.log("confirmation", confirmation);
+      setVerificationResult(confirmation);
+      setShowMenu(false);
+      setShowOtpScreen(true);
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+    }
+  };
+  const codeChangeHandler = (event: any) => {
+    console.log("event", event);
+    const [, codeFieldIndex] = event.target.name.split("-");
+    let fieldIntIndex = parseInt(codeFieldIndex, 10);
+    setVerificationCode((prevState) => prevState + event.target.value);
+
+    if (fieldIntIndex < 5 && event?.nativeEvent?.inputType === "insertText") {
+      itemsRef.current[fieldIntIndex + 1].focus();
+    } else if (
+      fieldIntIndex < 1 &&
+      event?.nativeEvent?.inputType === "deleteContentBackward"
+    ) {
+      itemsRef.current[fieldIntIndex - 1].focus();
+    } else {
+      const field = document.querySelector(`Input[name=code-${fieldIntIndex}]`);
+      field && field.blur();
+    }
+  };
+  const codeInputFields = new Array(6)
+    .fill(0)
+    .map((item, index) => (
+      <input
+        ref={(ref) => itemsRef.current.push(ref)}
+        name={`code-${index}`}
+        key={index}
+        className="font-normal w-full h-full flex flex-col items-center justify-center text-center px-2 py-2 gap-1 outline-none rounded-xl border border-gray-200 text-slate-700 bg-white focus:bg-gray-50 "
+        onChange={(event) => codeChangeHandler(event)}
+        maxLength={1}
+      />
+    ));
+  const login = (mobile: string, uid: string) => {
+    const path = process.env.NEXT_PUBLIC_API_PATH;
+    fetch(`${path}/api/user/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mobile: mobile,
+        uid: uid,
+      }),
+    })
+      .then((r) => r.json())
+      .then((res) => {
+        console.log("RES", res);
+        if (res?.status === 200) {
+          res?.data?.length && dispatch(saveUser(res.data[0]));
+          router.push("/login");
+        }
+      })
+      .catch((error) => console.log(error));
+  };
   return (
     <div className="lg:hidden">
       <footer
@@ -79,18 +196,34 @@ const FooterNav = ({ onDismiss, cartCount, activeTab }: any) => {
               <p className="font-sans text-sm font-semibold">Cart</p>
             </div>
           </Link>
-          <Link
-            href="/login"
-            className="text-sm font-medium text-gray-700 hover:text-gray-800"
-          >
-            <div className="flex flex-col  items-center  text-gray-900">
-              <UserIcon
-                className="h-6 w-6 font-bold text-slate-900"
-                aria-hidden="true"
-              />
-              <p className="font-sans text-sm font-semibold">Account</p>
+          {isLoggedIn ? (
+            <Link
+              href="/login"
+              className="text-sm font-medium text-gray-700 hover:text-gray-800"
+            >
+              <div className="flex flex-col  items-center  text-gray-900">
+                <UserIcon
+                  className="h-6 w-6 font-bold text-slate-900"
+                  aria-hidden="true"
+                />
+                <p className="font-sans text-sm font-semibold">Account</p>
+              </div>
+            </Link>
+          ) : (
+            <div
+              className="text-sm font-medium text-gray-700 hover:text-gray-800"
+              onClick={() => setShowMenu(true)}
+            >
+              <div className="flex flex-col  items-center  text-gray-900">
+                <UserIcon
+                  className="h-6 w-6 font-bold text-slate-900"
+                  aria-hidden="true"
+                />
+                <p className="font-sans text-sm font-semibold">Account</p>
+              </div>
             </div>
-          </Link>
+          )}
+
           {/* <div
             onClick={(e) => {
               router.push("/checkout");
@@ -102,7 +235,7 @@ const FooterNav = ({ onDismiss, cartCount, activeTab }: any) => {
         </div>
       </footer>
       <BottomSheet
-        open={false}
+        open={showMenu}
         onDismiss={onDismiss}
         defaultSnap={({ maxHeight }) => maxHeight * 0.8}
         snapPoints={({ maxHeight }) => maxHeight * 0.35}
@@ -110,6 +243,7 @@ const FooterNav = ({ onDismiss, cartCount, activeTab }: any) => {
         <div className="flex items-center flex-col pb-2">
           <p className="text-lg font-medium px-4 text-center">Sign In</p>
           <div className="w-full md:w-1/2 px-3  md:mb-0 lg:w-full">
+            <div id="recaptcha-container"></div>
             <label
               className="block uppercase tracking-wide text-slate-900 text-xs font-bold mb-2 pl-1"
               htmlFor="grid-first-name"
@@ -123,7 +257,7 @@ const FooterNav = ({ onDismiss, cartCount, activeTab }: any) => {
                 id="grid-first-name"
                 type="tel"
                 placeholder="Mobile Number"
-                onChange={(e) => console.log(e.target.value)}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
               />
             </div>
@@ -131,13 +265,17 @@ const FooterNav = ({ onDismiss, cartCount, activeTab }: any) => {
               We will send you an SMS with a verification code.
             </p>
           </div>
-          <button className=" mt-3 py-2 px-4 border rounded-md text-white bg-slate-900">
+          <button
+            id="recaptcha-container"
+            className=" mt-3 py-2 px-4 border rounded-md text-white bg-slate-900"
+            onClick={handleSendOTP}
+          >
             Send OTP
           </button>
         </div>
       </BottomSheet>
       <BottomSheet
-        open={false}
+        open={showOtpScreen}
         onDismiss={onDismiss}
         defaultSnap={({ maxHeight }) => maxHeight * 0.8}
         snapPoints={({ maxHeight }) => maxHeight * 0.35}
@@ -152,45 +290,17 @@ const FooterNav = ({ onDismiss, cartCount, activeTab }: any) => {
             />
           </div>
           <p className="text-xs text-gray-700 my-3">
-            Enter 6-Digit OTP sent to +918529991515
+            {`Enter 6-Digit OTP sent to +91${phoneNumber}`}
           </p>
           <div className="w-full md:w-1/2 px-3  md:mb-0 lg:w-full">
-            <div className="flex flex-row items-center justify-between mx-auto w-full max-w-xs mt-1">
-              <div className="w-12 h-12 ">
-                <input
-                  className="w-full h-full flex flex-col items-center justify-center text-center px-2 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
-                  type="text"
-                  name=""
-                  id=""
-                />
-              </div>
-              <div className="w-12 h-12 ">
-                <input
-                  className="w-full h-full flex flex-col items-center justify-center text-center px-2 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
-                  type="text"
-                  name=""
-                  id=""
-                />
-              </div>
-              <div className="w-12 h-12 ">
-                <input
-                  className="w-full h-full flex flex-col items-center justify-center text-center px-2 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
-                  type="text"
-                  name=""
-                  id=""
-                />
-              </div>
-              <div className="w-12 h-12 ">
-                <input
-                  className="w-full h-full flex flex-col items-center justify-center text-center px-2 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
-                  type="text"
-                  name=""
-                  id=""
-                />
-              </div>
+            <div className=" gap-1 flex flex-row items-center justify-between mx-auto w-full max-w-xs mt-1">
+              {codeInputFields}
             </div>
           </div>
-          <button className="cursor-pointer mt-4 py-2 px-4 border rounded-md text-white bg-slate-900">
+          <button
+            onClick={onVerifyOtp}
+            className="cursor-pointer mt-4 py-2 px-4 border rounded-md text-white bg-slate-900"
+          >
             Verify
           </button>
         </div>

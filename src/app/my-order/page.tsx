@@ -16,7 +16,7 @@ export default function Myorder() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userId: "62d77350bf3b735cc5c407d2",
+        userId: user?._id,
       }),
     })
       .then((r) => r.json())
