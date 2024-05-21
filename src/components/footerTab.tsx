@@ -8,7 +8,7 @@ import {
 import "react-spring-bottom-sheet/dist/style.css";
 import Link from "next/link";
 
-const FooterTab = ({ router, total, onlyMenu, activeTab }: any) => {
+const FooterTab = ({ router, total, onlyMenu, activeTab, cartCount }: any) => {
   return (
     <div className="lg:hidden">
       <footer
@@ -75,7 +75,7 @@ const FooterTab = ({ router, total, onlyMenu, activeTab }: any) => {
                 aria-hidden="true"
               />
               <span className="absolute pt-[1px] mr-12 mb-3 w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-xl group-hover:text-slate-950">
-                {"1"}
+                {cartCount ?? ""}
               </span>
               <p
                 className={`text-sm  pl-1 ${

@@ -14,6 +14,7 @@ import { firebaseAuth } from "@/lib/firebase/config";
 import { saveUser } from "@/lib/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import OtpInput from "react-otp-input";
 var recaptchaVerifier = null as any;
 
 const FooterNav = ({ cartCount, activeTab }: any) => {
@@ -78,36 +79,7 @@ const FooterNav = ({ cartCount, activeTab }: any) => {
       console.error("Error sending OTP:", error);
     }
   };
-  const codeChangeHandler = (event: any) => {
-    console.log("event", event);
-    const [, codeFieldIndex] = event.target.name.split("-");
-    let fieldIntIndex = parseInt(codeFieldIndex, 10);
-    setVerificationCode((prevState) => prevState + event.target.value);
 
-    if (fieldIntIndex < 5 && event?.nativeEvent?.inputType === "insertText") {
-      itemsRef.current[fieldIntIndex + 1].focus();
-    } else if (
-      fieldIntIndex < 1 &&
-      event?.nativeEvent?.inputType === "deleteContentBackward"
-    ) {
-      itemsRef.current[fieldIntIndex - 1].focus();
-    } else {
-      const field = document.querySelector(`Input[name=code-${fieldIntIndex}]`);
-      field && field.blur();
-    }
-  };
-  const codeInputFields = new Array(6)
-    .fill(0)
-    .map((item, index) => (
-      <input
-        ref={(ref) => itemsRef.current.push(ref)}
-        name={`code-${index}`}
-        key={index}
-        className="font-normal w-full h-full flex flex-col items-center justify-center text-center px-2 py-2 gap-1 outline-none rounded-xl border border-gray-200 text-slate-700 bg-white focus:bg-gray-50 "
-        onChange={(event) => codeChangeHandler(event)}
-        maxLength={1}
-      />
-    ));
   const login = (mobile: string, uid: string) => {
     const path = process.env.NEXT_PUBLIC_API_PATH;
     fetch(`${path}/api/user/login`, {
@@ -293,9 +265,28 @@ const FooterNav = ({ cartCount, activeTab }: any) => {
             {`Enter 6-Digit OTP sent to +91${phoneNumber}`}
           </p>
           <div className="w-full md:w-1/2 px-3  md:mb-0 lg:w-full">
-            <div className=" gap-1 flex flex-row items-center justify-between mx-auto w-full max-w-xs mt-1">
+            {/* <div className=" gap-1 flex flex-row items-center justify-between mx-auto w-full max-w-xs mt-1">
               {codeInputFields}
-            </div>
+            </div> */}
+            <OtpInput
+              containerStyle={
+                "gap-1 flex flex-row items-center justify-between mx-auto w-full max-w-xs mt-1"
+              }
+              inputStyle={
+                "font-normal w-full h-full p-2 items-center justify-center text-center  outline-none rounded-xl border border-gray-200 text-slate-700 bg-white focus:bg-gray-50"
+              }
+              skipDefaultStyles={true}
+              value={verificationCode}
+              onChange={setVerificationCode}
+              numInputs={6}
+              renderSeparator={<span></span>}
+              renderInput={(props) => (
+                <input
+                  {...props}
+                  // className="font-normal w-32 h-full  items-center justify-center text-center  outline-none rounded-xl border border-gray-200 text-slate-700 bg-white focus:bg-gray-50 "
+                />
+              )}
+            />
           </div>
           <button
             onClick={onVerifyOtp}

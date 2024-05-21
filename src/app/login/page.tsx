@@ -19,6 +19,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
   const user = useSelector((state: any) => state.user?.user);
+  const cart = useSelector((state: any) => state.cart);
+
   console.log("user", user);
   const router = useRouter();
   const dispach = useDispatch();
@@ -94,7 +96,11 @@ export default function Login() {
           <ChevronRightIcon className="h-6 w-6 text-gray-500" />
         </div>
       </div>
-      <FooterTab onlyMenu={true} activeTab="account" />
+      <FooterTab
+        onlyMenu={true}
+        activeTab="account"
+        cartCount={cart?.cartCount}
+      />
     </div>
   );
 }

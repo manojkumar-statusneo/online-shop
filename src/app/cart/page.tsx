@@ -200,6 +200,7 @@ export default function Cart() {
           setOpen={setOpen}
           router={router}
           total={parseInt(cart?.total + 2)}
+          cartCount={cart?.cartCount}
           activeTab="cart"
         />
       </div>
