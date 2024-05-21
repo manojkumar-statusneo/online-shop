@@ -1,14 +1,11 @@
 "use client";
-import HeroItems from "../../components/hero-items";
-import Category from "../../components/category";
-import HorizontalList from "../../components/horizontal-list";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ParentContainer from "@/components/parentContainer";
 import { addToCart } from "@/lib/slices/cartSlice";
-import { BottomSheet } from "react-spring-bottom-sheet";
+import "../../components/style.css";
 import Link from "next/link";
 
 const path = process.env.NEXT_PUBLIC_API_PATH;
@@ -17,7 +14,11 @@ const Home = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state: any) => state.cart);
 
-  const onPressCart = (item: any) => {
+  const onPressCart = (e: any, item: any) => {
+    e.currentTarget.classList.add("animate-shake");
+    setTimeout(() => {
+      e.currentTarget.classList.remove("animate-shake");
+    }, 1000);
     dispatch(addToCart(item));
     toast.success("Item added to cart");
   };
@@ -68,8 +69,8 @@ const Home = () => {
 
                   <button
                     className="text-xs justify-center items-center py-2 flex self-center my-1 w-full border rounded-md border-slate-900 bg-white"
-                    onClick={() => {
-                      onPressCart(callout);
+                    onClick={(e) => {
+                      onPressCart(e, callout);
                     }}
                   >
                     Add to cart

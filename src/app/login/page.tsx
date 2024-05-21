@@ -1,6 +1,6 @@
 "use client";
 import FooterTab from "@/components/footerTab";
-import { logOut, saveUser } from "@/lib/slices/userSlice";
+import { logOut } from "@/lib/slices/userSlice";
 import {} from "cookie";
 import {
   ArrowLeftIcon,
@@ -9,23 +9,18 @@ import {
   ArrowLeftEndOnRectangleIcon,
   MapPinIcon,
 } from "@heroicons/react/24/outline";
-import { cookies } from "next/headers";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
   const user = useSelector((state: any) => state.user?.user);
   const cart = useSelector((state: any) => state.cart);
-
-  console.log("user", user);
   const router = useRouter();
   const dispach = useDispatch();
-  const [email, setEmail] = useState("test@gmail.com");
-  const [password, setPassword] = useState("12345");
 
   const onPressLogin = async () => {
     const path = process.env.NEXT_PUBLIC_API_PATH;
