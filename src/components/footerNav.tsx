@@ -219,6 +219,7 @@ const FooterNav = ({ cartCount, activeTab }: any) => {
           <p className="text-lg font-medium px-4 text-center">Sign In</p>
           <div className="w-full md:w-1/2 px-3  md:mb-0 lg:w-full">
             <div id="recaptcha-container"></div>
+
             <label
               className="block uppercase tracking-wide text-slate-900 text-xs font-bold mb-2 pl-1"
               htmlFor="grid-first-name"
@@ -234,6 +235,7 @@ const FooterNav = ({ cartCount, activeTab }: any) => {
                 placeholder="Mobile Number"
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                required
               />
             </div>
             <p className="text-xs text-gray-700">

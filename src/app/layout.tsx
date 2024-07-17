@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import StoreProvider from "./StoreProvider";
+import Transition from "./template";
 import Providers from "@/components/ProgressBarProvider";
 export const metadata: Metadata = {
   title: "Online-Shop",
@@ -9,8 +10,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  router,
 }: Readonly<{
   children: React.ReactNode;
+  router: any;
 }>) {
   return (
     <html lang="en">

@@ -4,7 +4,7 @@ import Navbar from "./nav-bar";
 import Footer from "./footer";
 import FooterNav from "./footerNav";
 import PaymentFooter from "./paymentFooter";
-
+import { motion } from "framer-motion";
 const ParentContainer = ({ children, cartCount, activeTab, hideNav }: any) => {
   return (
     <>

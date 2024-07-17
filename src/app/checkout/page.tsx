@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowLeftIcon,
   PlusIcon,
@@ -14,44 +14,47 @@ import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import PaymentFooter from "@/components/paymentFooter";
 import Link from "next/link";
-const address = [
-  {
-    _id: "123",
-    name: "Manoj Soni",
-    mobile: "91234478",
-    pincode: "125001",
-    address: "abz colony",
-    city: "hisar",
-    state: "Haryana",
-    selected: true,
-  },
-  // {
-  //   _id: "124",
-  //   name: "Surya Kumar",
-  //   mobile: "95234478",
-  //   pincode: "122006",
-  //   address: "basai road",
-  //   city: "gurgaon",
-  //   state: "Haryana",
-  //   selected: false,
-  // },
-];
+import { getAddress } from "@/services/productServices";
+import NavBarDesktop from "@/components/nav-bar-desktop";
+import { saveOrderAddress } from "@/lib/slices/orderSlice";
+
 export default function Checkout() {
+  const user = useSelector((state: any) => state.user.user);
   const dispatch = useDispatch();
-  const [allAddress, SetAllAddress] = useState(address);
+  const [allAddress, SetAllAddress] = useState([]);
   const [selectedIndex, SetSelectedIndex] = useState(0);
 
   const router = useRouter();
   const cart = useSelector((state: any) => state.cart);
-  console.log("cart", cart);
+  console.log("ALLLLADRESSS", allAddress[selectedIndex]);
 
   const onSelectAddress = (index: any) => {
     SetSelectedIndex(index);
+   
   };
-
+const handleOnClick=()=>{
+  dispatch(saveOrderAddress(allAddress[selectedIndex]))
+  router.push('/payment')
+}
+  const fetchAddress = async () => {
+    const productInfo = await getAddress(user?._id);
+    SetAllAddress(
+      productInfo?.data?.map((item: any) => {
+        return {
+          ...item,
+          selected: false,
+        };
+      })
+    );
+  };
+  useEffect(() => {
+    if (user?._id) {
+      fetchAddress();
+    }
+  }, [user]);
   return (
-    <div className="bg-slate-50 flex-1 flex-col flex-grow pb-36">
-      <div className="flex items-start p-2  bg-white sticky top-0 z-50 h-12 justify-between flex-1">
+    <div className="bg-[#fff] flex-1 flex-col flex-grow pb-20 lg:pb-1">
+      <div className="flex items-start p-2  bg-white sticky top-0 z-50 h-12 justify-between flex-1 lg:hidden">
         <div className="ml-1 flex h-7 items-center ">
           <button
             type="button"
@@ -69,16 +72,25 @@ export default function Checkout() {
           <h1 className="font-normal text-sm"> STEP 2/3</h1>
         </div>
       </div>
-      <div className="flex flex-col w-full lg:flex lg:flex-1 lg:px-10">
+      <div className={`hidden lg:flex`}>
+        <NavBarDesktop cartCount={cart?.cartCount} total={parseInt(cart?.total + 2)} screen="checkout" />
+      </div>
+      
+      <div className="flex flex-col w-full lg:flex lg:flex-1 lg:px-28 mb-2">
+      <div className="hidden lg:flex px-4 mt-8 lg:mb-2">
+        <h1 className="text-slate-900 font-medium text-xl">Select Delivery Address</h1>
+        </div>
+      <div className="flex flex-col lg:flex-row lg:flex-1">
+       
         {allAddress?.length > 0 ? (
-          <div className="flex flex-col lg:flex-row">
-            <div className="mt-8 px-3 lg:flex flex-1  ">
-              <div className="flow-root lg:flex flex-1 ">
+          <div className="flex flex-col lg:flex-1">
+            <div className="px-3 lg:flex lg:flex-1 ">
+              <div className="flow-root lg:flex lg:flex-1">
                 <ul role="list" className="my-2 lg:flex-1">
                   {allAddress.map((item: any, index: number) => (
                     <li
                       key={item._id}
-                      className="flex py-2 px-2 rounded-md mb-1 bg-white"
+                      className="flex py-2 px-2 rounded-md mb-1 border"
                     >
                       <button
                         type="button"
@@ -109,16 +121,24 @@ export default function Checkout() {
                           <p className="text-sm text-gray-700">{`${item.city}, ${item.state}`}</p>
                         </div>
                         <div>
-                          <p className="text-sm text-gray-700">{`${item?.mobile}`}</p>
+                          <p className="text-sm text-gray-700">{`+91${item?.phoneNo}`}</p>
                         </div>
                       </div>
                     </li>
                   ))}
+                  <Link href={`/address`}>
+              <div className="hidden  mt-2 py-3  w-full items-center text-center bg-white justify-center lg:flex">
+                <PlusIcon className="h-6 w-6 text-black" aria-hidden="true" />
+                <p className=" text-slate-900 font-medium text-lg">
+                  Add new address
+                </p>
+              </div>
+            </Link>
                 </ul>
               </div>
             </div>
             <Link href={`/address`}>
-              <div className="flex mt-2 py-3  w-full items-center text-center bg-white justify-center">
+              <div className="flex mt-2 py-3  w-full items-center text-center bg-white justify-center lg:hidden">
                 <PlusIcon className="h-6 w-6 text-black" aria-hidden="true" />
                 <p className=" text-slate-900 font-medium text-lg">
                   Add new address
@@ -127,18 +147,21 @@ export default function Checkout() {
             </Link>
           </div>
         ) : (
+          <div className="flex w-full bg-white justify-center">
           <Link href={`/address`}>
-            <div className="flex mt-2 py-3  w-full items-center text-center bg-white justify-center">
+            <div className="flex mt-2 py-3 px-3 border w-full text-center justify-center">
               <PlusIcon className="h-6 w-6 text-black" aria-hidden="true" />
               <p className=" text-slate-900 font-medium text-lg">
                 Add new address
               </p>
             </div>
           </Link>
+          </div>
         )}
-      </div>
-      <>
-        <div className="p-4 mt-2 bg-white flex flex-col justify-center">
+
+    
+      <div className=" flex flex-col justify-center">
+        <div className="p-4 mt-2 bg-white flex flex-col justify-center border">
           <div className="flex item-center mb-2">
             <Image alt="abc" src="/discount.png" width={30} height={30} />
             <h2 className="items-baseline  font-normal pt-1 ">
@@ -158,7 +181,7 @@ export default function Checkout() {
           </div>
         </div>
 
-        <div className="mt-2 p-4 flex flex-col divide-y divide-dashed lg:w-1/3 bg-white ">
+        <div className="mt-2 p-4 flex flex-col divide-y divide-dashed  bg-white border">
           <div>
             <div className="flex py-1 justify-between items-baseline  text-slate-900">
               <h2 className="text-sm">Item total</h2>
@@ -192,18 +215,22 @@ export default function Checkout() {
               ₹26 saved so far on this order
             </h3>
           </div>
+         
           <div
-            onClick={(e) => {
-              router.push("/checkout");
-            }}
+           onClick={handleOnClick}
             className="hidden cursor-pointer mx-3 lg:flex flex-1 gap-1 items-center justify-center border border-transparent bg-slate-900 px-2 py-3 text-base font-medium text-white shadow-sm hover:bg-slate-900 my-2"
           >
-            <h1 className="text-base">Checkout</h1>
+          
+            <h1 className="text-base">Continue</h1>
             <ChevronRightIcon className="h-6 w-4" aria-hidden="true" />
           </div>
+         
         </div>
-        <PaymentFooter />
-      </>
+       
+      </div>
+      </div>
+      </div>
+      <PaymentFooter />
       <footer
         className="bg-white
               text-center
@@ -215,16 +242,13 @@ export default function Checkout() {
              "
       >
         <div className="mx-3">
-          <Link
-            href={{
-              pathname: "/payment",
-              query: allAddress[selectedIndex], // the data
-            }}
-          >
-            <button className=" bg-slate-900 px-2 h-11 w-full rounded text-base font-medium text-white shadow-sm ">
+          
+            <button 
+             onClick={handleOnClick}
+            className=" bg-slate-900 px-2 h-11 w-full rounded text-base font-medium text-white shadow-sm ">
               Continue
             </button>
-          </Link>
+          
         </div>
       </footer>
     </div>

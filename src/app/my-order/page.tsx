@@ -33,7 +33,7 @@ export default function Myorder() {
 
   return (
     <div>
-      <div className=" bg-slate-50 sticky top-0 z-50 overflow-hidden">
+      <div className=" bg-[#fff] sticky top-0 z-50 overflow-hidden">
         <div className="flex items-start p-2 mb-3 bg-white py-3">
           <div className="ml-1 flex h-7 items-center">
             <button

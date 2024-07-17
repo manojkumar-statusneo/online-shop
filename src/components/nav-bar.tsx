@@ -139,42 +139,41 @@ export default function Navbar({ cartCount }: any) {
                 <div className="lg:ml-6">
                   <a href="#" className=" text-gray-400 hover:text-gray-500">
                     <MagnifyingGlassIcon
-                      className="h-8 w-8 text-slate-900"
+                      className="h-8 w-8 text-slate-900 lg:hidden"
                       aria-hidden="true"
                     />
+                     <p className="hidden text-base font-normal text-[#312EDF] lg:flex">
+                            {'Search'} 
+                        </p>
                   </a>
                 </div>
 
                 {/* Cart */}
                 <div className="hidden ml-2 lg:flex">
                   <Link href="/cart" className=" flex items-center ">
-                    <ShoppingBagIcon
+                    {/* <ShoppingBagIcon
                       className="h-8 w-8 text-slate-900"
                       aria-hidden="true"
-                    />
-                    <span className="absolute  pl-[12px] pt-2  text-sm font-bold text-slate-700 group-hover:text-slate-950">
-                      {cartCount}
+                    /> */}
+                    <p className="pl-2 text-base font-normal text-[#312EDF]">
+                            {'Cart'} 
+                        </p>
+                    <span className="text-base font-normal text-[#312EDF] group-hover:text-slate-950">
+                      {`(${cartCount})`}
                     </span>
                   </Link>
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                   {Object.keys(user).length > 0 ? (
                     <div className="flow-root text-center">
-                      <div className="flex flex-row">
-                        <p className="text-sm font-medium text-gray-700">
-                          Welcome
-                          <span className="pl-1 mr-2 text-sm font-medium text-gray-700">
-                            {user?.name}
-                          </span>{" "}
+                      <Link href="/login" className="cursor-pointer flex flex-row text-center items-center">
+                     
+                    
+                        <p className="pl-2  text-base font-normal text-[#312EDF]">
+                            {user?.mobile} 
                         </p>
-                        <UserCircleIcon
-                          className="h-6 w-6 cursor-pointer"
-                          aria-hidden="true"
-                          onClick={(e) => {
-                            setShowDropdown(!showDropDown);
-                          }}
-                        />
-                      </div>
+                     
+                      </Link>
 
                       <div
                         className={` 
@@ -182,33 +181,7 @@ export default function Navbar({ cartCount }: any) {
                         !showDropDown ? "hidden" : "flex"
                       } `}
                       >
-                        <div
-                          id="dropdownHover"
-                          className="z-30 mt-5 bg-white divide-y divide-gray-100 rounded-sm shadow w-44 "
-                        >
-                          <ul
-                            className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                            aria-labelledby="dropdownHoverButton"
-                          >
-                            {dropDownList.map((item) => (
-                              <li
-                                key={item.label}
-                                className="flow-root py-2 divide-y-2"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  onClickItem(item.href);
-                                }}
-                              >
-                                <a
-                                  href={item.href}
-                                  className="font-medium text-gray-900"
-                                >
-                                  {item.label}
-                                </a>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                      
                       </div>
                     </div>
                   ) : (
@@ -216,10 +189,9 @@ export default function Navbar({ cartCount }: any) {
                       href="/login"
                       className="text-sm font-medium text-gray-700 hover:text-gray-800"
                     >
-                      <UserCircleIcon
-                        className="h-8 w-8 text-slate-900 cursor-pointer"
-                        aria-hidden="true"
-                      />
+                      <p className="pl-2  text-base font-normal text-[#312EDF]">
+                            {'Account'} 
+                        </p>
                     </Link>
                   )}
                   {/* <span className="h-6 w-px bg-gray-200" aria-hidden="true" /> */}

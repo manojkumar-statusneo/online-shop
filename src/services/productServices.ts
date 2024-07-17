@@ -19,3 +19,12 @@ export async function getCatWiseProducts(catId: string) {
     return error;
   }
 }
+export async function getAddress(userId: string) {
+  try {
+    const res = await fetch(`${path}/api/address/${userId}`);
+    const response = await res.json();
+    return response;
+  } catch (error) {
+    return error;
+  }
+}

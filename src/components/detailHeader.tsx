@@ -7,7 +7,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 const DetailHeader = ({ title, cartCount }: any) => {
   const router = useRouter();
   return (
-    <div className="bg-slate-50 sticky top-0 z-50 overflow-hidden ">
+    <div className="bg-[#fff] sticky top-0 z-50 overflow-hidden ">
       <div className="flex items-start p-2  bg-white py-3 w-full justify-between">
         <div className="ml-1 flex h-7 items-center">
           <button

@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeToCart } from "@/lib/slices/cartSlice";
 import FooterTab from "@/components/footerTab";
+import NavBarDesktop from "@/components/nav-bar-desktop";
 import Image from "next/image";
 import PaymentFooter from "@/components/paymentFooter";
 
@@ -33,8 +34,8 @@ export default function Cart() {
   };
 
   return (
-    <div className="bg-slate-50 flex-1 flex-col flex-grow pb-36">
-      <div className="flex items-start p-2  bg-white sticky top-0 z-50 h-12 justify-between flex-1">
+    <div className="bg-[#fff] flex-1 flex-col flex-grow pb-36 lg:pb-1">
+      <div className="flex items-start p-2  bg-white sticky top-0 z-50 h-12 justify-between flex-1 lg:hidden">
         <div className="ml-1 flex h-7 items-center ">
           <button
             type="button"
@@ -52,29 +53,32 @@ export default function Cart() {
           <h1 className="font-normal text-sm"> STEP 1/3</h1>
         </div>
       </div>
-      <div className="flex flex-col w-full lg:flex lg:flex-1 lg:px-10 my-2">
+      <div className={`hidden lg:flex`}>
+        <NavBarDesktop cartCount={cart?.cartCount} total={parseInt(cart?.total + 2)} screen="cart" />
+      </div>
+      <div className="flex flex-col w-full lg:flex lg:flex-1 lg:px-28 my-2">
         {cart?.cartCount > 0 ? (
           <div className="flex flex-col lg:flex-row">
-            <div className="mt-8 px-3 lg:flex flex-1 bg-white">
+            <div className="px-3 lg:flex flex-1 bg-white lg:mr-2">
               <div className="flow-root lg:flex flex-1 ">
-                <ul role="list" className="my-2 lg:flex-1">
+                <ul role="list" className="lg:flex-1">
                   {cart?.cartProducts.map((product: any) => (
                     <li
                       key={product._id}
-                      className="flex py-2 px-2 border my-2"
+                      className="flex py-2 px-2 border lg:py-4s"
                     >
-                      <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                      <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 lg:h-32 lg:w-32">
                         <img
                           src={product.images[0]}
                           alt={product.images[0]}
-                          className="h-full w-full object-cover object-center"
+                          className="h-full w-full aspect-4 object-fill"
                         />
                       </div>
 
-                      <div className="ml-4 flex flex-1 flex-col justify-evenly">
+                      <div className="ml-4 flex flex-1 flex-col">
                         <div>
-                          <div className="flex justify-between  font-serif text-base font-medium text-gray-900">
-                            <h3>{product.title}</h3>
+                          <div className="flex justify-between w-[100%] font-josefin text-xs text-gray-900 lg:text-lg">
+                            <h3>{product?.title}</h3>
                             <button
                               type="button"
                               className="font-medium text-slate-800"
@@ -87,9 +91,18 @@ export default function Cart() {
                           </div>
                         </div>
                         <div>
-                          <p className="">{`₹${product.price}`}</p>
+
+                          <div className="flex flex-row items-center">
+                    <h3 className="text-xs lg:text-base">{`₹${product.price}`}</h3>
+                    <h3 className="text-xs line-through pl-1 text-gray-800 italic lg:text-base">{`₹${Number(
+                      Number(product.price) + 100
+                    )}`}</h3>
+                    <h3 className="text-xs pl-1  text-green-800">
+                      {"(33% off)"}
+                    </h3>
+                  </div>
                         </div>
-                        <div className="flex w-20 text-center font-serif text-base justify-evenly border-gray-400 border-[1px] p-1">
+                        <div className="flex w-20 text-center font-serif text-base justify-evenly border-gray-400 border-[1px] p-1 mt-2">
                           <button
                             type="button"
                             onClick={() => decreaseQty(product)}
@@ -119,10 +132,11 @@ export default function Cart() {
                 </ul>
               </div>
             </div>
-            <div className="p-4 mt-2 bg-white flex flex-col justify-center">
+            <div className=" flex flex-col justify-center mt-2 lg:mt-0">
+            <div className="p-4 bg-white flex flex-col justify-center lg:mb-1 border">
               <div className="flex item-center mb-2">
                 <Image alt="abc" src="/discount.png" width={30} height={30} />
-                <h2 className="items-baseline  font-normal pt-1 ">
+                <h2 className="items-baseline font-normal pt-1">
                   Coupons and offers
                 </h2>
               </div>
@@ -138,7 +152,7 @@ export default function Cart() {
                 </button>
               </div>
             </div>
-            <div className="mt-2 p-4 flex flex-col divide-y divide-dashed lg:w-1/3 bg-white ">
+            <div className="mt-2 p-4 flex flex-col divide-y divide-dashed  bg-white border">
               <div>
                 <div className="flex py-1 justify-between items-baseline  text-slate-900">
                   <h2 className="text-sm">Item total</h2>
@@ -181,6 +195,7 @@ export default function Cart() {
                 <h1 className="text-base">Checkout</h1>
                 <ChevronRightIcon className="h-6 w-4" aria-hidden="true" />
               </div>
+              </div>
             </div>
           </div>
         ) : (
@@ -202,6 +217,7 @@ export default function Cart() {
           total={parseInt(cart?.total + 2)}
           cartCount={cart?.cartCount}
           activeTab="cart"
+          showDesktop={false}
         />
       </div>
     </div>

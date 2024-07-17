@@ -10,12 +10,12 @@ import { CheckCircleIcon as CheckCircleIcon2 } from "@heroicons/react/24/solid";
 import useRazorpay from "react-razorpay";
 import { useDispatch, useSelector } from "react-redux";
 import { resetCart } from "@/lib/slices/cartSlice";
-import Stepper from "@/components/stepper";
-import { redirect, useRouter } from "next/navigation";
+import {  useRouter } from "next/navigation";
 import PaymentFooter from "@/components/paymentFooter";
 import Image from "next/image";
 import Accordion from "@/components/accordion";
 import RadioButtonOption from "@/components/paymentOption";
+import NavBarDesktop from "@/components/nav-bar-desktop";
 const option = [
   {
     title: "Phone Pay",
@@ -60,18 +60,21 @@ export default function Payment() {
   const dispatch = useDispatch();
   const Razorpay = useRazorpay();
   const cart = useSelector((state: any) => state.cart);
+  const selectedAddress = useSelector((state: any) => state.order?.
+selectedAddress);
+
   const user = useSelector((state: any) => state.user.user);
+    console.log("searchParams",selectedAddress)
   console.log("payment user", user);
   const [selectedOption, setSelectedOption] = useState("Phone Pay");
-
   const saveOrder = (order_id: string) => {
     const shippingInfo = {
-      address: "abcd",
-      pinCode: 125001,
-      city: "Hisar",
-      state: "Haryana",
+      address: selectedAddress?.address,
+      pinCode: selectedAddress?.pinCode,
+      city: selectedAddress?.city,
+      state: selectedAddress?.state,
       country: "india",
-      phoneNo: 8765433456,
+      phoneNo:selectedAddress?.phoneNo ,
     };
     const path = process.env.NEXT_PUBLIC_API_PATH;
     fetch(`${path}/api/order/createorder`, {
@@ -122,6 +125,8 @@ export default function Payment() {
         amount: cart?.total * 100,
         currency: "INR",
         name: "UrbanYuvati",
+        prefill: {'contact': user?.mobile},
+      readonly: { 'contact': false },
         checkout: {
           method: {
             netbanking: 0,
@@ -152,44 +157,6 @@ export default function Payment() {
         theme: {
           color: "#0f172a",
         },
-        // config: {
-        //   display: {
-        //     blocks: {
-        //       banks: {
-        //         name: "Pay via UPI",
-        //         instruments: [
-        //           {
-        //             method: "upi",
-        //             apps: ["google_pay"],
-        //           },
-        //           {
-        //             method: "upi",
-        //             apps: ["paytm"],
-        //           },
-        //           {
-        //             method: "upi",
-        //             apps: ["phonepay"],
-        //           },
-        //         ],
-        //       },
-        //       cards: {
-        //         name: "Pay via Cards",
-        //         instruments: [
-        //           {
-        //             method: "card",
-        //           },
-        //         ],
-        //       },
-        //     },
-
-        //     sequence: ["upi", "block.cards"],
-        //     preferences: {
-        //       show_default_blocks: true,
-        //     },
-        //   },
-        // },
-        //redirect: true,
-        // callback_url: `/success`,
       };
       const rzpay = new Razorpay(options as any);
       rzpay.on("payment.failed", function (response: any) {
@@ -205,8 +172,8 @@ export default function Payment() {
     setSelectedOption(option?.title);
   };
   return (
-    <div className="bg-slate-50 flex-1 flex-col flex-grow pb-20">
-      <div className="flex items-start p-2  bg-white sticky top-0 z-50 h-12 justify-between flex-1">
+    <div className="bg-[#fff] flex-1 flex-col flex-grow pb-20">
+      <div className="flex items-start p-2  bg-white sticky top-0 z-50 h-12 justify-between flex-1 lg:hidden">
         <div className="ml-1 flex h-7 items-center ">
           <button
             type="button"
@@ -224,17 +191,21 @@ export default function Payment() {
           <h1 className="font-normal text-sm"> STEP 3/3</h1>
         </div>
       </div>
-      <div>
-        <Accordion title="UPI">
+      <div className={`hidden lg:flex`}>
+        <NavBarDesktop cartCount={cart?.cartCount} total={parseInt(cart?.total + 2)} screen="payment" />
+      </div>
+      <div className="flex flex-col w-full lg:flex lg:flex-1 lg:px-28 my-2">
+      <div className="flex flex-col lg:flex-row">
+     <div className="lg:flex lg:w-full lg:flex-col border mr-2">
+     <Accordion title="UPI">
           <RadioButtonOption
             options={option}
             selectedOption={selectedOption}
             onSelectOption={handleSelectOption}
           />
         </Accordion>
-      </div>
-      <div className="flex mt-2 py-3 px-3  w-full items-center  bg-white justify-between">
-        <div className="pr-3">
+        <div className="flex mt-2 py-3 px-3  w-full items-center  bg-white justify-between">
+        <div className=" lg:flex flex-1 lg:flex-col">
           <div className="flex gap-1 items-center">
             <CreditCardIcon
               className="h-6 w-6 text-slate-700"
@@ -247,7 +218,6 @@ export default function Payment() {
             Use credit/debit card,UPI,wallet to complete the payment
           </p>
         </div>
-
         <button
           type="button"
           className="font-medium text-slate-800 h-6 w-6 mt-1"
@@ -266,80 +236,84 @@ export default function Payment() {
           )}
         </button>
       </div>
-      <>
-        <div className="p-4 mt-2 bg-white flex flex-col justify-center">
-          <div className="flex item-center mb-2">
-            <Image alt="abc" src="/discount.png" width={30} height={30} />
-            <h2 className="items-baseline  font-normal pt-1 ">
-              Coupons and offers
-            </h2>
-          </div>
+     </div>
+      
+      <div className="flex flex-col justify-center mt-2 lg:mt-0">
+            <div className="p-4 bg-white flex flex-col justify-center lg:mb-1 border">
+              <div className="flex item-center mb-2">
+                <Image alt="abc" src="/discount.png" width={30} height={30} />
+                <h2 className="items-baseline font-normal pt-1">
+                  Coupons and offers
+                </h2>
+              </div>
 
-          <div className="flex">
-            <input
-              type="text"
-              placeholder="Enter coupon code"
-              className="appearance-none block w-64 bg-white text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-            />
-            <button className="bg-slate-900 px-2 h-11 w-32 rounded text-base font-medium text-white shadow-sm ml-2">
-              Apply
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-2 p-4 flex flex-col divide-y divide-dashed lg:w-1/3 bg-white ">
-          <div>
-            <div className="flex py-1 justify-between items-baseline  text-slate-900">
-              <h2 className="text-sm">Item total</h2>
-              <div className="flex items-center">
-                <h3 className=" text-xs line-through pl-1 text-gray-600 italic">{`₹${Number(
-                  Number(cart?.total) + 100
-                )}`}</h3>
-                <h3 className="text-sm pl-1 text-slate-900 italic">{`₹${Number(
-                  cart?.total
-                )}`}</h3>
+              <div className="flex">
+                <input
+                  type="text"
+                  placeholder="Enter coupon code"
+                  className="appearance-none block w-64 bg-white text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                />
+                <button className="bg-slate-900 px-2 h-11 w-32 rounded text-base font-medium text-white shadow-sm ml-2">
+                  Apply
+                </button>
               </div>
             </div>
-            <div className="flex pb-2 justify-between items-baseline  text-gray-900">
-              <h2 className="text-sm">Delivery fee</h2>
-              <h2 className="text-sm pl-1 text-slate-900 italic">₹2.00</h2>
+            <div className="mt-2 p-4 flex flex-col divide-y divide-dashed  bg-white border">
+              <div>
+                <div className="flex py-1 justify-between items-baseline  text-slate-900">
+                  <h2 className="text-sm">Item total</h2>
+                  <div className="flex items-center">
+                    <h3 className=" text-xs line-through pl-1 text-gray-600 italic">{`₹${Number(
+                      Number(cart?.total) + 100
+                    )}`}</h3>
+                    <h3 className="text-sm pl-1 text-slate-900 italic">{`₹${Number(
+                      cart?.total
+                    )}`}</h3>
+                  </div>
+                </div>
+                <div className="flex pb-2 justify-between items-baseline  text-gray-900">
+                  <h2 className="text-sm">Delivery fee</h2>
+                  <h2 className="text-sm pl-1 text-slate-900 italic">₹2.00</h2>
+                </div>
+              </div>
+
+              <div className="flex  py-2 justify-between items-baseline  font-base font-medium text-gray-900">
+                <h2 className="text-sm"> Grand Total</h2>
+                <h2 className="text-sm italic">₹{parseInt(cart?.total + 2)}</h2>
+              </div>
+              <div className="flex  py-3 text-base font-normal text-gray-900">
+                <h2 className="text-slate-700 font-sans text-sm">
+                  Average delivery time
+                  <span className="font-semibold"> 6-7 days</span>
+                </h2>
+              </div>
+              <div className="flex  bg-green-100 rounded-sm justify-center h-8 items-center">
+                <h3 className="text-green-500 mb-[2px]">
+                  ₹26 saved so far on this order
+                </h3>
+              </div>
+              <div
+                onClick={handlePayment}
+                className="hidden cursor-pointer mx-3 lg:flex flex-1 gap-1 items-center justify-center border border-transparent bg-slate-900 px-2 py-3 text-base font-medium text-white shadow-sm hover:bg-slate-900 my-2"
+              >
+                <h1 className="text-base"> {`Pay ₹${parseInt(cart?.total + 2)?.toLocaleString()}`}{" "}</h1>
+               
+              </div>
+              </div>
             </div>
-          </div>
+</div>
 
-          <div className="flex  py-2 justify-between items-baseline  font-base font-medium text-gray-900">
-            <h2 className="text-sm"> Grand Total</h2>
-            <h2 className="text-sm italic">₹{parseInt(cart?.total + 2)}</h2>
-          </div>
-          <div className="flex  py-3 text-base font-normal text-gray-900">
-            <h2 className="text-slate-700 font-sans text-sm">
-              Average delivery time
-              <span className="font-semibold"> 6-7 days</span>
-            </h2>
-          </div>
-          <div className="flex  bg-green-100 rounded-sm justify-center h-8 items-center">
-            <h3 className="text-green-500 mb-[2px]">
-              ₹26 saved so far on this order
-            </h3>
-          </div>
-          <div
-            onClick={(e) => {
-              router.push("/checkout");
-            }}
-            className="hidden cursor-pointer mx-3 lg:flex flex-1 gap-1 items-center justify-center border border-transparent bg-slate-900 px-2 py-3 text-base font-medium text-white shadow-sm hover:bg-slate-900 my-2"
-          >
-            <h1 className="text-base">Checkout</h1>
-            <ChevronRightIcon className="h-6 w-4" aria-hidden="true" />
-          </div>
-        </div>
-        <PaymentFooter />
-      </>
-
+</div>
+<PaymentFooter />
       <footer
-        className="bg-slate-50
+        className="bg-[#fff]
               text-center
              fixed
              inset-x-0
-             bottom-0"
+             bottom-0
+             lg:hidden
+             "
+             
       >
         <div
           className="mt-2 flex justify-between px-2 py-2 border
