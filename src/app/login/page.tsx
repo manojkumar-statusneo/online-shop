@@ -19,9 +19,9 @@ import "react-toastify/dist/ReactToastify.css";
 import NavBarDesktop from "@/components/nav-bar-desktop";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export default function Login() {
-  let isMobile = null;
   const user = useSelector((state: any) => state.user?.user);
   const cart = useSelector((state: any) => state.cart);
   const router = useRouter();
@@ -65,7 +65,6 @@ export default function Login() {
   };
 
   useEffect(() => {
-  isMobile= typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches;
     getOrderList();
     getAddressList();
   }, []);
@@ -95,6 +94,7 @@ export default function Login() {
     dispach(logOut());
     router.replace("/");
   };
+  const isBreakpoint = useMediaQuery(768)
   return (
     <div>
       <div className="flex  items-start p-2  bg-white sticky top-0 z-50 h-16 lg:hidden">
@@ -281,7 +281,7 @@ export default function Login() {
           <ChevronRightIcon className="h-6 w-6 text-gray" />
         </div>
       </div>
-      {isMobile &&<FooterTab
+      {isBreakpoint &&<FooterTab
         onlyMenu={true}
         activeTab="account"
         cartCount={cart?.cartCount}

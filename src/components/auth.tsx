@@ -13,6 +13,7 @@ import { saveUser } from "@/lib/slices/userSlice";
 import OtpInput from "react-otp-input";
 import { useDispatch } from "react-redux";
 import Spinner from "./spinner";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 var recaptchaVerifier = null as any;
 const Auth = ({
   router,
@@ -23,7 +24,6 @@ const Auth = ({
 }: any) => {
   const dispatch = useDispatch();
   console.log("nextRoute",nextRoute)
-  let isMobile = null
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showOtpScreen, setShowOtpScreen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -112,10 +112,8 @@ const Auth = ({
         console.log(error)});
   };
 
-  useEffect(()=>{
-    isMobile= typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches;
-  },[])
-  if (!isMobile) {
+  const isBreakpoint = useMediaQuery(768)
+  if (!isBreakpoint) {
     return (
       <div>
         <Modal open={triggerLogin} onOpenChange={() => onDismiss()}>

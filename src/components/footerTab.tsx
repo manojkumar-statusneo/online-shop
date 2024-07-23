@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   ChevronRightIcon,
   HomeIcon,
@@ -10,6 +10,7 @@ import "react-spring-bottom-sheet/dist/style.css";
 import "react-spring-bottom-sheet/dist/style.css";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const FooterTab = ({
   router,
@@ -21,11 +22,8 @@ const FooterTab = ({
 }: any) => {
   const user = useSelector((state: any) => state.user.user);
   const isLoggedIn = user?.mobile ? true : false;
-  let isMobile = null;
-  useEffect(()=>{
-    isMobile= window.matchMedia("(max-width: 600px)").matches
-  },[])
-  if (!isMobile) {
+  const isBreakpoint = useMediaQuery(768)
+  if (!isBreakpoint) {
     return (
       <div>
         <div
