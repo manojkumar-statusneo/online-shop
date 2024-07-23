@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 
 export default function Login() {
+  let isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches;
   const user = useSelector((state: any) => state.user?.user);
   const cart = useSelector((state: any) => state.cart);
   const router = useRouter();
@@ -89,6 +90,7 @@ export default function Login() {
     }
   };
   const onLogout = () => {
+    toast.success("Logged out successfully");
     dispach(logOut());
     router.replace("/");
   };
@@ -98,7 +100,7 @@ export default function Login() {
         <div className="ml-1 flex h-7 items-center">
           <button
             type="button"
-            className="z-50 px-2 text-gray-400"
+            className="z-50 px-2 text-gray"
             onClick={(e) => {
               router.back();
             }}
@@ -126,7 +128,7 @@ export default function Login() {
           <h1 className="font-normal mb-5 text-lg">
             {activeTab === 1 ? "Orders" : "Addresses"}
           </h1>
-          <h1 className="font-josefin text-lg"> {user?.mobile}</h1>
+          <h1 className="font-syne text-lg"> {user?.mobile}</h1>
         </div>
 
         <div className="inline-flex flex-1 w-full">
@@ -136,11 +138,11 @@ export default function Login() {
                 onClick={() => setActiveTab(1)}
                 className={`cursor-pointer flex flex-row p-4 ${
                   activeTab === 1
-                    ? "bg-slate-200 border-r-4 border-blue-600"
+                    ? "bg-blue-50 border-r-4 border-blue-600"
                     : ""
                 }`}
               >
-                <ListBulletIcon className="h-6 w-5 text-gray-500" />
+                <ListBulletIcon className="h-6 w-5 text-gray" />
                 <h1 className="font-normal ml-2"> My Order</h1>
               </div>
             </li>
@@ -149,11 +151,11 @@ export default function Login() {
                 onClick={() => setActiveTab(2)}
                 className={`cursor-pointer flex flex-row p-4 ${
                   activeTab === 2
-                    ? "bg-slate-200 border-r-4 border-blue-600"
+                    ? "bg-blue-50 border-r-4 border-blue-600"
                     : ""
                 }`}
               >
-                <ListBulletIcon className="h-6 w-5 text-gray-500" />
+                <ListBulletIcon className="h-6 w-5 text-gray" />
                 <h1 className="font-normal ml-2"> Addresses</h1>
               </div>
             </li>
@@ -162,8 +164,8 @@ export default function Login() {
                 onClick={onPressLogin}
                 className="cursor-pointer flex flex-row p-4"
               >
-                <ArrowLeftEndOnRectangleIcon className="h-6 w-5 text-gray-500" />
-                <h1 className="font-normal ml-2">Logout</h1>
+                <ArrowLeftEndOnRectangleIcon className="h-6 w-5 text-gray" />
+                <h1 className="font-normal ml-2 text-slate">Logout</h1>
               </div>
             </li>
           </ul>
@@ -186,16 +188,16 @@ export default function Login() {
                               alt=""
                             />
                             <div className="min-w-0 flex-auto">
-                              <p className=" text-sm leading-5 text-gray-500">
+                              <p className=" text-sm leading-5 text-gray">
                                 {item?.title}
                               </p>
-                              <p className="mt-1 truncate text-sm leading-5 text-gray-500">
+                              <p className="mt-1 truncate text-sm leading-5 text-gray">
                                 Total:₹{item?.totalPrice}
                               </p>
-                              <p className="mt-1 truncate text-sm leading-5 text-gray-500">
+                              <p className="mt-1 truncate text-sm leading-5 text-gray">
                                 Status:₹{item?.orderStatus}
                               </p>
-                              <p className="mt-1 truncate text-sm leading-5 text-gray-500">
+                              <p className="mt-1 truncate text-sm leading-5 text-gray">
                                 Date:₹
                                 {moment(item?.createdAt).format("DD-MM-YYYY")}
                               </p>
@@ -218,18 +220,18 @@ export default function Login() {
                         className="flex py-2 px-2 rounded-md mb-1 bg-white border"
                       >
                         <div className="ml-2 flex flex-1 flex-col justify-evenly">
-                          <div className="flex font-serif text-base font-medium text-slate-900">
+                          <div className="flex font-serif text-base font-medium text-slate">
                             <h3>{item?.name}</h3>
                           </div>
 
                           <div>
-                            <p className="text-sm text-gray-700">{`${item.address}`}</p>
+                            <p className="text-sm text-gray">{`${item.address}`}</p>
                           </div>
                           <div>
-                            <p className="text-sm text-gray-700">{`${item.city}, ${item.state}`}</p>
+                            <p className="text-sm text-gray">{`${item.city}, ${item.state}`}</p>
                           </div>
                           <div>
-                            <p className="text-sm text-gray-700">{`+91${item?.phoneNo}`}</p>
+                            <p className="text-sm text-gray">{`+91${item?.phoneNo}`}</p>
                           </div>
                         </div>
                       </li>
@@ -237,7 +239,7 @@ export default function Login() {
                      <Link href={`/address`}>
           <div className="flex mt-2 py-3  w-full items-center text-center bg-white justify-center">
             <PlusIcon className="h-6 w-6 text-black" aria-hidden="true" />
-            <p className=" text-slate-900 font-medium text-lg">
+            <p className=" text-slate font-medium text-lg">
               Add new address
             </p>
           </div>
@@ -254,35 +256,35 @@ export default function Login() {
         <Link href={"/my-order"}>
           <div className="flex flex-row justify-between w-full  border-b-[1px] border-gray-100 py-2.5">
             <div className="flex flex-row ">
-              <ListBulletIcon className="h-6 w-5 text-gray-500" />
+              <ListBulletIcon className="h-6 w-5 text-gray" />
               <h1 className="font-normal ml-2"> My Order</h1>
             </div>
-            <ChevronRightIcon className="h-6 w-6 text-gray-500" />
+            <ChevronRightIcon className="h-6 w-6 text-gray" />
           </div>
         </Link>
         <Link href={"/myaddress"}>
           <div className="flex flex-row justify-between w-full  border-b-[1px] border-gray-100 py-2.5 cursor-pointer">
             <div className="flex flex-row ">
-              <MapPinIcon className="h-6 w-5 text-gray-500" />
+              <MapPinIcon className="h-6 w-5 text-gray" />
               <h1 className="font-normal ml-2"> Addresses</h1>
             </div>
-            <ChevronRightIcon className="h-6 w-6 text-gray-500" />
+            <ChevronRightIcon className="h-6 w-6 text-gray" />
           </div>
         </Link>
 
         <div className="flex flex-row justify-between w-full  border-b-[1px] border-gray-100 py-2.5 cursor-pointer">
           <div className="flex flex-row" onClick={onPressLogin}>
-            <ArrowLeftEndOnRectangleIcon className="h-6 w-5 text-gray-500" />
+            <ArrowLeftEndOnRectangleIcon className="h-6 w-5 text-gray" />
             <h1 className="font-normal ml-2">Logout</h1>
           </div>
-          <ChevronRightIcon className="h-6 w-6 text-gray-500" />
+          <ChevronRightIcon className="h-6 w-6 text-gray" />
         </div>
       </div>
-      <FooterTab
+      {isMobile &&<FooterTab
         onlyMenu={true}
         activeTab="account"
         cartCount={cart?.cartCount}
-      />
+      />}
     </div>
   );
 }

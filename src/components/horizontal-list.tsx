@@ -22,7 +22,7 @@ const HorizontalList = (props: any) => {
   return (
     <div className="px-4 relative sm:px-6 lg:mx-20 pb-4">
       <div className="max-w-2xl sm:py-2 lg:max-w-none lg:py-8">
-        <h2 className="text-2xl py-2 text-center text-gray-900 lg:text-3xl">
+        <h2 className="text-2xl py-2 text-center text-slate lg:text-3xl">
           {props?.title}
         </h2>
       </div>
@@ -46,7 +46,7 @@ const HorizontalList = (props: any) => {
                 </h2>
                 <div className="flex flex-row items-center">
                   <h3 className="text-sm font-medium">{`₹${callout.price}`}</h3>
-                  <h3 className=" text-xs line-through pl-1 text-gray-800 italic">{`₹${Number(
+                  <h3 className=" text-xs line-through pl-1 text-gray italic">{`₹${Number(
                     Number(callout.price) + 100
                   )}`}</h3>
                   <h3 className=" text-xs pl-1  text-green-800">

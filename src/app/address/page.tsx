@@ -77,7 +77,7 @@ export default function Address() {
         <div className="ml-1 flex h-7 items-center ">
           <button
             type="button"
-            className="z-50 px-2 text-gray-400"
+            className="z-50 px-2 text-gray"
             onClick={(e) => {
               router.back();
             }}
@@ -117,7 +117,7 @@ export default function Address() {
             <div className="mt-3">
               <svg
                 aria-hidden="true"
-                className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300"
+                className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray fill-gray-600 dark:fill-gray-300"
                 viewBox="0 0 100 101"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -134,7 +134,7 @@ export default function Address() {
             </div>
           ) : (
             <button
-              className=" bg-slate-900 px-2 h-11 w-full rounded text-base font-medium text-white shadow-sm "
+              className=" bg-slate px-2 h-11 w-full rounded text-base font-medium text-white shadow-sm "
               onClick={saveAddress}
             >
               Save Address

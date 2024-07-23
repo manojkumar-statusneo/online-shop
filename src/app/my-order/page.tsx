@@ -34,11 +34,11 @@ export default function Myorder() {
   return (
     <div>
       <div className=" bg-[#fff] sticky top-0 z-50 overflow-hidden">
-        <div className="flex items-start p-2 mb-3 bg-white py-3">
+        <div className="flex items-start  bg-white py-3">
           <div className="ml-1 flex h-7 items-center">
             <button
               type="button"
-              className="z-50 px-2 text-gray-400"
+              className="z-50 px-2 text-gray"
               onClick={(e) => {
                 router.back();
               }}
@@ -53,12 +53,12 @@ export default function Myorder() {
           <h1 className="font-normal"> My Orders</h1>
         </div>
       </div>
-      <div className="m-2">
+      <div className="m-1 px-3">
         <ul role="list">
           {orderList.map((item: any) => (
             <li
               key={item?.order_id}
-              className="flex px-2 justify-between gap-x-6 py-5 border my-2"
+              className="flex px-2 justify-between gap-x-2 py-2 border my-2"
             >
               <div className="flex gap-x-4">
                 <img
@@ -67,16 +67,16 @@ export default function Myorder() {
                   alt=""
                 />
                 <div className="min-w-0 flex-auto">
-                  <p className=" text-sm leading-5 text-gray-500">
+                  <p className="text-sm leading-5 text-slate">
                     {item?.title}
                   </p>
-                  <p className="mt-1 truncate text-sm leading-5 text-gray-500">
+                  <p className="mt-1 truncate text-sm leading-5 text-slate">
                     Total:₹{item?.totalPrice}
                   </p>
-                  <p className="mt-1 truncate text-sm leading-5 text-gray-500">
+                  <p className="mt-1 truncate text-sm leading-5 text-slate">
                     Status:₹{item?.orderStatus}
                   </p>
-                  <p className="mt-1 truncate text-sm leading-5 text-gray-500">
+                  <p className="mt-1 truncate text-sm leading-5 text-slate">
                     Date:₹{moment(item?.createdAt).format("DD-MM-YYYY")}
                   </p>
                 </div>

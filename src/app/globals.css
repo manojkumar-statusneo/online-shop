@@ -1,15 +1,14 @@
-@font-face {
-	font-family: 'Syne';
-	src: url('/static/fonts/Syne/Syne-Regular.ttf');
-	src: url('/static/fonts/Syne/Syne-Bold.ttf');
-	src: url('/static/fonts/Syne/Syne-SemiBold.ttf');
-	src: url('/static/fonts/Syne/Syne-Light.ttf');
-}
+
 @tailwind base;
 
-p,h1,h3,h2,a {
-  @apply font-josefin
+html {
+  @apply font-syne;
 }
+h1,h2,label{
+  letter-spacing: 0.025em;
+  font-weight: 600;
+}
+
 @tailwind components;
 
 @tailwind utilities;

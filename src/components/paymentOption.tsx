@@ -11,28 +11,28 @@ const RadioButtonOption = ({
       {options.map((option: any) => (
         <label
           key={option?.title}
-          className="flex items-center mb-2 text-slate-900"
+          className="flex items-center mb-2 text-slate"
         >
           <button
             type="button"
-            className="font-medium text-slate-800 h-6 w-6 mt-1"
+            className="font-medium text-slate h-6 w-6 mt-1"
             onClick={() => onSelectOption(option)}
           >
             {selectedOption === option?.title ? (
               <CheckCircleIcon2
-                className="h-6 w-6 text-slate-700"
+                className="h-6 w-6 text-slate"
                 aria-hidden="true"
               />
             ) : (
               <CheckCircleIcon
-                className="h-6 w-6 text-slate-700"
+                className="h-6 w-6 text-slate"
                 aria-hidden="true"
               />
             )}
           </button>
 
           <span className="ml-2  border rounded ">{option?.image}</span>
-          <span className="ml-2 font-normal text-slate-900">
+          <span className="ml-2 font-normal text-slate">
             {option?.title}
           </span>
         </label>

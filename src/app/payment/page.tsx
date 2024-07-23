@@ -16,6 +16,9 @@ import Image from "next/image";
 import Accordion from "@/components/accordion";
 import RadioButtonOption from "@/components/paymentOption";
 import NavBarDesktop from "@/components/nav-bar-desktop";
+import OrderSummery from "@/components/order-summery";
+import { toast, ToastContainer } from "react-toastify";
+import Spinner from "@/components/spinner";
 const option = [
   {
     title: "Phone Pay",
@@ -62,11 +65,10 @@ export default function Payment() {
   const cart = useSelector((state: any) => state.cart);
   const selectedAddress = useSelector((state: any) => state.order?.
 selectedAddress);
-
   const user = useSelector((state: any) => state.user.user);
-    console.log("searchParams",selectedAddress)
-  console.log("payment user", user);
   const [selectedOption, setSelectedOption] = useState("Phone Pay");
+  const [isLoading, setIsLoading] = useState(false);
+
   const saveOrder = (order_id: string) => {
     const shippingInfo = {
       address: selectedAddress?.address,
@@ -92,16 +94,16 @@ selectedAddress);
     })
       .then((r) => r.json())
       .then((res) => {
-        console.log("RES", res);
         if (res?.status === 200) {
-          dispatch(resetCart());
           router.push("/success");
+          dispatch(resetCart());
         }
       })
       .catch((error) => console.log(error));
   };
   const createOrder = async () => {
-    const path = process.env.NEXT_PUBLIC_API_PATH;
+    try {
+      const path = process.env.NEXT_PUBLIC_API_PATH;
     const data = await fetch(`${path}/api/payment/razorpay`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -110,62 +112,77 @@ selectedAddress);
         currency: "INR",
       }),
     })
-      .then((t) => t.json())
-      .catch((error) => console.log(error));
-    return data;
+    const response = data.json();
+
+    return response;
+    } catch (error) {
+      throw new Error(JSON.stringify(error))
+    }
+    
   };
 
   const handlePayment = useCallback(async () => {
-    const order = await createOrder();
-
-    console.log("myorder", order);
-    if (order) {
-      const options = {
-        key: "rzp_test_U1odAZx2aIXLbD",
-        amount: cart?.total * 100,
-        currency: "INR",
-        name: "UrbanYuvati",
-        prefill: {'contact': user?.mobile},
-      readonly: { 'contact': false },
-        checkout: {
-          method: {
-            netbanking: 0,
-            card: 1,
-            upi: 1,
-            wallet: 1,
+    try {
+      setIsLoading(true)
+      const order = await createOrder();
+      console.log("myorder", order);
+      if (order) {
+        const options = {
+          key: "rzp_test_U1odAZx2aIXLbD",
+          amount: cart?.total * 100,
+          currency: "INR",
+          name: "UrbanYuvati",
+          prefill: {'contact': user?.mobile},
+        readonly: { 'contact': false },
+          checkout: {
+            method: {
+              netbanking: 0,
+              card: 1,
+              upi: 1,
+              wallet: 1,
+            },
           },
-        },
-        order_id: order.id,
-        handler: async (response: any) => {
-          const data = {
-            orderCreationId: order?.id,
-            razorpayPaymentId: response.razorpay_payment_id,
-            razorpayOrderId: response.razorpay_order_id,
-            razorpaySignature: response.razorpay_signature,
-          };
-          const path = process.env.NEXT_PUBLIC_API_PATH;
-          const result = await fetch(`${path}/api/payment/verify`, {
-            headers: { "Content-Type": "application/json" },
-            method: "POST",
-            body: JSON.stringify(data),
-          });
-          console.log("verify result", result);
-          if (result?.ok) {
-            saveOrder(response.razorpay_order_id);
-          }
-        },
-        theme: {
-          color: "#0f172a",
-        },
-      };
-      const rzpay = new Razorpay(options as any);
-      rzpay.on("payment.failed", function (response: any) {
-        console.log("responseeeee rajorpay", response);
-
-        alert(response.error.reason);
-      });
-      rzpay.open();
+          order_id: order.id,
+          handler: async (response: any) => {
+            const data = {
+              orderCreationId: order?.id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpaySignature: response.razorpay_signature,
+            };
+            const path = process.env.NEXT_PUBLIC_API_PATH;
+            const result = await fetch(`${path}/api/payment/verify`, {
+              headers: { "Content-Type": "application/json" },
+              method: "POST",
+              body: JSON.stringify(data),
+            });
+            console.log("verify result", result);
+            if (result?.ok) {
+              setIsLoading(false);
+              saveOrder(response.razorpay_order_id);
+            }
+          },
+          theme: {
+            color: "#0f172a",
+          },
+        };
+        const rzpay = new Razorpay(options as any);
+        rzpay.on("payment.failed", function (response: any) {
+          console.log("responseeeee rajorpay", response);
+  
+          alert(response.error.reason);
+        });
+        rzpay.open();
+      }
+      else{
+        setIsLoading(false)
+        toast.error("Something went wrong 😑");
+      }
+    } catch (error) {
+      toast.error("there is some issue,Please try again 😑");
+      setIsLoading(false)
     }
+  
   }, [Razorpay]);
 
   const handleSelectOption = (option: any) => {
@@ -177,7 +194,7 @@ selectedAddress);
         <div className="ml-1 flex h-7 items-center ">
           <button
             type="button"
-            className="z-50 px-2 text-gray-400"
+            className="z-50 px-2 text-gray"
             onClick={(e) => {
               router.back();
             }}
@@ -208,29 +225,29 @@ selectedAddress);
         <div className=" lg:flex flex-1 lg:flex-col">
           <div className="flex gap-1 items-center">
             <CreditCardIcon
-              className="h-6 w-6 text-slate-700"
+              className="h-6 w-6 text-slate"
               aria-hidden="true"
             />
-            <h2 className=" text-slate-900 font-normal">Online payment</h2>
+            <h2 className=" text-slate font-normal">Online payment</h2>
           </div>
 
-          <p className="text-gray-600 text-xs">
+          <p className="text-gray text-xs">
             Use credit/debit card,UPI,wallet to complete the payment
           </p>
         </div>
         <button
           type="button"
-          className="font-medium text-slate-800 h-6 w-6 mt-1"
+          className="font-medium text-slate h-6 w-6 mt-1"
           onClick={() => setSelectedOption("card")}
         >
           {selectedOption === "card" ? (
             <CheckCircleIcon2
-              className="h-6 w-6 text-slate-700"
+              className="h-6 w-6 text-slate"
               aria-hidden="true"
             />
           ) : (
             <CheckCircleIcon
-              className="h-6 w-6 text-slate-700"
+              className="h-6 w-6 text-slate"
               aria-hidden="true"
             />
           )}
@@ -238,69 +255,14 @@ selectedAddress);
       </div>
      </div>
       
-      <div className="flex flex-col justify-center mt-2 lg:mt-0">
-            <div className="p-4 bg-white flex flex-col justify-center lg:mb-1 border">
-              <div className="flex item-center mb-2">
-                <Image alt="abc" src="/discount.png" width={30} height={30} />
-                <h2 className="items-baseline font-normal pt-1">
-                  Coupons and offers
-                </h2>
-              </div>
-
-              <div className="flex">
-                <input
-                  type="text"
-                  placeholder="Enter coupon code"
-                  className="appearance-none block w-64 bg-white text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                />
-                <button className="bg-slate-900 px-2 h-11 w-32 rounded text-base font-medium text-white shadow-sm ml-2">
-                  Apply
-                </button>
-              </div>
-            </div>
-            <div className="mt-2 p-4 flex flex-col divide-y divide-dashed  bg-white border">
-              <div>
-                <div className="flex py-1 justify-between items-baseline  text-slate-900">
-                  <h2 className="text-sm">Item total</h2>
-                  <div className="flex items-center">
-                    <h3 className=" text-xs line-through pl-1 text-gray-600 italic">{`₹${Number(
-                      Number(cart?.total) + 100
-                    )}`}</h3>
-                    <h3 className="text-sm pl-1 text-slate-900 italic">{`₹${Number(
-                      cart?.total
-                    )}`}</h3>
-                  </div>
-                </div>
-                <div className="flex pb-2 justify-between items-baseline  text-gray-900">
-                  <h2 className="text-sm">Delivery fee</h2>
-                  <h2 className="text-sm pl-1 text-slate-900 italic">₹2.00</h2>
-                </div>
-              </div>
-
-              <div className="flex  py-2 justify-between items-baseline  font-base font-medium text-gray-900">
-                <h2 className="text-sm"> Grand Total</h2>
-                <h2 className="text-sm italic">₹{parseInt(cart?.total + 2)}</h2>
-              </div>
-              <div className="flex  py-3 text-base font-normal text-gray-900">
-                <h2 className="text-slate-700 font-sans text-sm">
-                  Average delivery time
-                  <span className="font-semibold"> 6-7 days</span>
-                </h2>
-              </div>
-              <div className="flex  bg-green-100 rounded-sm justify-center h-8 items-center">
-                <h3 className="text-green-500 mb-[2px]">
-                  ₹26 saved so far on this order
-                </h3>
-              </div>
-              <div
-                onClick={handlePayment}
-                className="hidden cursor-pointer mx-3 lg:flex flex-1 gap-1 items-center justify-center border border-transparent bg-slate-900 px-2 py-3 text-base font-medium text-white shadow-sm hover:bg-slate-900 my-2"
-              >
-                <h1 className="text-base"> {`Pay ₹${parseInt(cart?.total + 2)?.toLocaleString()}`}{" "}</h1>
-               
-              </div>
-              </div>
-            </div>
+     <OrderSummery
+            cartTotal ={cart?.total}
+            deliveryFees={0}
+            buttonTitle='Pay Now'
+            onClickButton={()=>{
+              handlePayment()
+            }}
+            />
 </div>
 
 </div>
@@ -321,24 +283,36 @@ selectedAddress);
         >
           <div className="flex flex-1 items-center gap-2">
             <div className="flex items-baseline flex-col">
-              <h3 className="text-xs font-medium text-blue-800 italic">
+              <h3 className="text-xs font-medium text-primary italic">
                 Payable Amount{" "}
               </h3>
-              <h2 className="font-medium text-slate-900 italic text-lg">
+              <h2 className="font-medium text-slate italic text-lg">
                 ₹{parseInt(cart?.total + 2)?.toLocaleString()}
               </h2>
             </div>
           </div>
-          <div
+          {isLoading? <Spinner color="text-slate" extraClasses="self-center" />: <div
             onClick={handlePayment}
-            className="cursor-pointer flex flex-1 gap-1 items-center justify-center border border-transparent bg-slate-800 px-2 py-2 text-base font-medium text-white shadow-sm hover:bg-slate-900 rounded-md"
+            className="cursor-pointer flex flex-1 gap-1 items-center justify-center border border-transparent bg-slate px-2 py-2 text-base font-medium text-white shadow-sm hover:bg-slate rounded-md"
           >
             <h1 className="text-md">
               {`Pay ₹${parseInt(cart?.total + 2)?.toLocaleString()}`}{" "}
             </h1>
-          </div>
+          </div>}
         </div>
       </footer>
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={true}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 }

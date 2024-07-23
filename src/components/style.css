@@ -10,3 +10,7 @@
   .animate-shake {
     animation: shake 0.5s ease-in-out;
   }
+  
+.carousel .thumb.selected{
+border: 1px solid rgb(18, 17, 17);
+}

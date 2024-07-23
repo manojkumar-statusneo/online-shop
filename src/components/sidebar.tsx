@@ -49,7 +49,7 @@ const Sidebar = ({ open, onClose }: any) => {
               <div className="flex px-4 pb-2 pt-5 justify-end">
                 <button
                   type="button"
-                  className="-m-2 inline-flex items-center justify-center rounded-md p-2 text-slate-900"
+                  className="-m-2 inline-flex items-center justify-center rounded-md p-2 text-slate"
                   onClick={onClose}
                 >
                   <span className="sr-only">Close menu</span>
@@ -65,7 +65,7 @@ const Sidebar = ({ open, onClose }: any) => {
                       className="flow-root cursor-pointer"
                       onClick={() => onClickSideBarItem(item?.href)}
                     >
-                      <p className="font-medium text-slate-900">{item.name}</p>
+                      <p className="font-medium text-slate">{item.name}</p>
                     </li>
                   ))}
                 </ul>

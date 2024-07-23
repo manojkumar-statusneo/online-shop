@@ -17,6 +17,7 @@ import Link from "next/link";
 import { getAddress } from "@/services/productServices";
 import NavBarDesktop from "@/components/nav-bar-desktop";
 import { saveOrderAddress } from "@/lib/slices/orderSlice";
+import OrderSummery from "@/components/order-summery";
 
 export default function Checkout() {
   const user = useSelector((state: any) => state.user.user);
@@ -58,7 +59,7 @@ const handleOnClick=()=>{
         <div className="ml-1 flex h-7 items-center ">
           <button
             type="button"
-            className="z-50 px-2 text-gray-400"
+            className="z-50 px-2 text-gray"
             onClick={(e) => {
               router.back();
             }}
@@ -78,7 +79,7 @@ const handleOnClick=()=>{
       
       <div className="flex flex-col w-full lg:flex lg:flex-1 lg:px-28 mb-2">
       <div className="hidden lg:flex px-4 mt-8 lg:mb-2">
-        <h1 className="text-slate-900 font-medium text-xl">Select Delivery Address</h1>
+        <h1 className="text-slate font-medium text-xl">Select Delivery Address</h1>
         </div>
       <div className="flex flex-col lg:flex-row lg:flex-1">
        
@@ -94,34 +95,34 @@ const handleOnClick=()=>{
                     >
                       <button
                         type="button"
-                        className="font-medium text-slate-800 h-6 w-6 mt-1"
+                        className="font-medium text-slate h-6 w-6 mt-1"
                         onClick={() => onSelectAddress(index)}
                       >
                         {selectedIndex === index ? (
                           <CheckCircleIcon2
-                            className="h-6 w-6 text-slate-700"
+                            className="h-6 w-6 text-slate"
                             aria-hidden="true"
                           />
                         ) : (
                           <CheckCircleIcon
-                            className="h-6 w-6 text-slate-700"
+                            className="h-6 w-6 text-slate"
                             aria-hidden="true"
                           />
                         )}
                       </button>
                       <div className="ml-2 flex flex-1 flex-col justify-evenly">
-                        <div className="flex font-serif text-base font-medium text-slate-900">
+                        <div className="flex font-serif text-base font-medium text-slate">
                           <h3>{item?.name}</h3>
                         </div>
 
                         <div>
-                          <p className="text-sm text-gray-700">{`${item.address}`}</p>
+                          <p className="text-sm text-gray">{`${item.address}`}</p>
                         </div>
                         <div>
-                          <p className="text-sm text-gray-700">{`${item.city}, ${item.state}`}</p>
+                          <p className="text-sm text-gray">{`${item.city}, ${item.state}`}</p>
                         </div>
                         <div>
-                          <p className="text-sm text-gray-700">{`+91${item?.phoneNo}`}</p>
+                          <p className="text-sm text-gray">{`+91${item?.phoneNo}`}</p>
                         </div>
                       </div>
                     </li>
@@ -129,7 +130,7 @@ const handleOnClick=()=>{
                   <Link href={`/address`}>
               <div className="hidden  mt-2 py-3  w-full items-center text-center bg-white justify-center lg:flex">
                 <PlusIcon className="h-6 w-6 text-black" aria-hidden="true" />
-                <p className=" text-slate-900 font-medium text-lg">
+                <p className=" text-slate font-medium text-lg">
                   Add new address
                 </p>
               </div>
@@ -140,7 +141,7 @@ const handleOnClick=()=>{
             <Link href={`/address`}>
               <div className="flex mt-2 py-3  w-full items-center text-center bg-white justify-center lg:hidden">
                 <PlusIcon className="h-6 w-6 text-black" aria-hidden="true" />
-                <p className=" text-slate-900 font-medium text-lg">
+                <p className=" text-slate font-medium text-lg">
                   Add new address
                 </p>
               </div>
@@ -151,7 +152,7 @@ const handleOnClick=()=>{
           <Link href={`/address`}>
             <div className="flex mt-2 py-3 px-3 border w-full text-center justify-center">
               <PlusIcon className="h-6 w-6 text-black" aria-hidden="true" />
-              <p className=" text-slate-900 font-medium text-lg">
+              <p className=" text-slate font-medium text-lg">
                 Add new address
               </p>
             </div>
@@ -159,75 +160,14 @@ const handleOnClick=()=>{
           </div>
         )}
 
-    
-      <div className=" flex flex-col justify-center">
-        <div className="p-4 mt-2 bg-white flex flex-col justify-center border">
-          <div className="flex item-center mb-2">
-            <Image alt="abc" src="/discount.png" width={30} height={30} />
-            <h2 className="items-baseline  font-normal pt-1 ">
-              Coupons and offers
-            </h2>
-          </div>
-
-          <div className="flex">
-            <input
-              type="text"
-              placeholder="Enter coupon code"
-              className="appearance-none block w-64 bg-white text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+           <OrderSummery
+            cartTotal ={cart?.total}
+            deliveryFees={0}
+            buttonTitle='Continue'
+            onClickButton={()=>{
+              router.push('/payment')
+            }}
             />
-            <button className="bg-slate-900 px-2 h-11 w-32 rounded text-base font-medium text-white shadow-sm ml-2">
-              Apply
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-2 p-4 flex flex-col divide-y divide-dashed  bg-white border">
-          <div>
-            <div className="flex py-1 justify-between items-baseline  text-slate-900">
-              <h2 className="text-sm">Item total</h2>
-              <div className="flex items-center">
-                <h3 className=" text-xs line-through pl-1 text-gray-600 italic">{`₹${Number(
-                  Number(cart?.total) + 100
-                )}`}</h3>
-                <h3 className="text-sm pl-1 text-slate-900 italic">{`₹${Number(
-                  cart?.total
-                )}`}</h3>
-              </div>
-            </div>
-            <div className="flex pb-2 justify-between items-baseline  text-gray-900">
-              <h2 className="text-sm">Delivery fee</h2>
-              <h2 className="text-sm pl-1 text-slate-900 italic">₹2.00</h2>
-            </div>
-          </div>
-
-          <div className="flex  py-2 justify-between items-baseline  font-base font-medium text-gray-900">
-            <h2 className="text-sm"> Grand Total</h2>
-            <h2 className="text-sm italic">₹{parseInt(cart?.total + 2)}</h2>
-          </div>
-          <div className="flex  py-3 text-base font-normal text-gray-900">
-            <h2 className="text-slate-700 font-sans text-sm">
-              Average delivery time
-              <span className="font-semibold"> 6-7 days</span>
-            </h2>
-          </div>
-          <div className="flex  bg-green-100 rounded-sm justify-center h-8 items-center">
-            <h3 className="text-green-500 mb-[2px]">
-              ₹26 saved so far on this order
-            </h3>
-          </div>
-         
-          <div
-           onClick={handleOnClick}
-            className="hidden cursor-pointer mx-3 lg:flex flex-1 gap-1 items-center justify-center border border-transparent bg-slate-900 px-2 py-3 text-base font-medium text-white shadow-sm hover:bg-slate-900 my-2"
-          >
-          
-            <h1 className="text-base">Continue</h1>
-            <ChevronRightIcon className="h-6 w-4" aria-hidden="true" />
-          </div>
-         
-        </div>
-       
-      </div>
       </div>
       </div>
       <PaymentFooter />
@@ -245,7 +185,7 @@ const handleOnClick=()=>{
           
             <button 
              onClick={handleOnClick}
-            className=" bg-slate-900 px-2 h-11 w-full rounded text-base font-medium text-white shadow-sm ">
+            className=" bg-slate px-2 h-11 w-full rounded text-base font-medium text-white shadow-sm ">
               Continue
             </button>
           

@@ -4,7 +4,9 @@ import { AppStore, makeStore } from "@/lib/store";
 import { useEffect, useRef } from "react";
 import { Provider } from "react-redux";
 
-import { saveUser } from "@/lib/slices/userSlice";
+import { logOut, saveUser } from "@/lib/slices/userSlice";
+import { useRouter } from "next/router";
+import { redirect } from "next/navigation";
 const path = process.env.NEXT_PUBLIC_API_PATH;
 export default function StoreProvider({
   children,
@@ -17,12 +19,15 @@ export default function StoreProvider({
     storeRef.current = makeStore();
   }
   const getSession = async () => {
+   
     try {
       const res = await fetch(`${path}/api/session`);
       const response = await res.json();
       if (response?.data && Object.keys(response?.data)?.length > 0) {
         storeRef?.current?.dispatch(saveUser(response?.data));
       } else {
+        storeRef?.current?.dispatch(logOut());
+       
       }
     } catch (error) {
       console.log("session eroor", error);

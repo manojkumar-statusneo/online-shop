@@ -14,7 +14,7 @@ const PaymentFooter = () => {
       </div>
       <div className="flex flex-1 gap-1 items-center">
         <LockClosedIcon className="h-4 w-4" aria-hidden="true" />
-        <h2 className="text-slate-700 font-sans text-xs pt-1">
+        <h2 className="text-slate font-sans text-xs pt-1">
           100%
           <span className="font-semibold text-xs uppercase">
             {" "}

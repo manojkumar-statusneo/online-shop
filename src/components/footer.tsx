@@ -4,7 +4,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-slate-900 p-8 border-gray-200 border">
+    <footer className="bg-white text-slate p-8 border-gray-200 border">
       <div className="container mx-auto flex flex-wrap justify-between">
         <div className="mb-4">
           <Image
@@ -15,17 +15,17 @@ const Footer = () => {
           />
           <div className="flex flex-col gap-[2px]">
             <p className="text-normal font-medium">Contact Detail</p>
-            <p className="text-xs font-base">manojsoni@gmail.com</p>
-            <p className="text-xs font-base">Azad Nagar Hisar,Haryana</p>
+            <p className="text-sm font-medium">manojsoni@gmail.com</p>
+            <p className="text-sm font-medium">Azad Nagar Hisar,Haryana</p>
           </div>
         </div>
         <div className="hidden lg:flex flex-col items-baseline">
           <p className="text-normal font-medium">Shop Now</p>
           <div className=" lg:flex flex-1 gap-1 flex-col">
-            <p className="text-xs font-base">Clothes</p>
-            <p className="text-xs font-base">Beauty</p>
-            <p className="text-xs font-base">Shoes</p>
-            <p className="text-xs font-base">Jewelry</p>
+            <p className="text-sm font-medium underline underline-offset-2 cursor-pointer">CLOTHES</p>
+            <p className="text-sm font-medium underline underline-offset-2 cursor-pointer">BEAUTY</p>
+            <p className="text-sm font-medium underline underline-offset-2 cursor-pointer">FOOTWEAR</p>
+            <p className="text-sm font-medium underline underline-offset-2 cursor-pointer">JEWELLERY</p>
           </div>
         </div>
         <div className="align-baseline">
@@ -46,24 +46,24 @@ const Footer = () => {
           <div className="flex flex-col items-center gap-[2px]">
             <p className="text-normal font-medium">Shop Now</p>
             <div className="flex flex-1 gap-4 lg:hidden">
-              <p className="text-xs font-base underline underline-offset-2">
-                Clothes
+              <p className="text-xs font-medium underline underline-offset-2">
+                CLOTHES
               </p>
-              <p className="text-xs font-base underline underline-offset-2">
-                Beauty
+              <p className="text-xs font-medium underline underline-offset-2">
+                BEAUTY
               </p>
-              <p className="text-xs font-base underline underline-offset-2">
-                Shoes
+              <p className="text-xs font-medium underline underline-offset-2">
+                FOOTWEAR
               </p>
-              <p className="text-xs font-base underline underline-offset-2">
-                Jewelry
+              <p className="text-xs font-medium underline underline-offset-2">
+              JEWELLERY
               </p>
             </div>
           </div>
         </div>
         {/* Copyright Information */}
         <div className="flex items-center justify-center w-full self-center mt-4">
-          <p className="text-xs font-base">
+          <p className="text-xs font-medium">
             &copy; 2023 Your Company. All rights reserved.
           </p>
         </div>

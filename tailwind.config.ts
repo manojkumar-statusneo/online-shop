@@ -8,9 +8,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      borderColor: {
+                    DEFAULT: '#e6e6e6',
+               },
+      colors: {
+        primary: "#312E8F",
+        button: "#1a181e",
+        'slate': "#0f172a",
+        'gray': "#6b7280",
+        body: "#F1F2EA",
+      },
       fontFamily: {
-        josefin: ["Josefin Sans", ...defaultTheme.fontFamily.sans],
-        syne_mono: ["Syne", "monospace",],
+        manrope: ["var(--font-manrope)"],
+        syne: ["var(--font-syne)"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

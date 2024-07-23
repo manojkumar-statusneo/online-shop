@@ -80,7 +80,7 @@ export default function Navbar({ cartCount }: any) {
     <>
       {hydrated && (
         <div
-          className={` bg-white border border-y-1 fixed z-40 flex-none w-full transition-transform duration-300 transform ${
+          className={` bg-white border border-y-1 border-t-0 fixed z-40 flex-none w-full transition-transform duration-300 transform ${
             show ? "translate-y-0" : "-translate-y-full"
           }`}
         >
@@ -95,11 +95,11 @@ export default function Navbar({ cartCount }: any) {
                 type="button"
                 className={`${
                   isOpen ? "hidden" : "visible"
-                } z-50 rounded-md bg-white p-2 text-gray-400 lg:hidden`}
+                } z-50 rounded-md bg-white p-2 text-gray lg:hidden`}
                 onClick={() => setOpen(true)}
               >
                 <Bars3Icon
-                  className="h-8 w-8 text-slate-900"
+                  className="h-8 w-8 text-slate"
                   aria-hidden="true"
                 />
               </button>
@@ -111,35 +111,40 @@ export default function Navbar({ cartCount }: any) {
                       className="flow-root cursor-pointer"
                       onClick={() => onClickSideBarItem(item?.href)}
                     >
-                      <p className="font-medium text-slate-900">{item.name}</p>
+                      <p className="font-medium text-slate">{item.name}</p>
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
             <div className="hidden lg:flex">
+              <Link href="/" className="cursor-pointer">
               <Image
                 alt="abc"
                 src="/logo_background.svg"
                 height={160}
                 width={160}
               />
+              </Link>
+              
             </div>
             <div className="lg:hidden">
+            <Link href="/" className="cursor-pointer">
               <Image
                 alt="abc"
                 src="/logo_background.svg"
                 height={130}
                 width={130}
               />
+              </Link>
             </div>
             <div>
               <div className="ml-auto flex items-center">
                 {/* Search */}
                 <div className="lg:ml-6">
-                  <a href="#" className=" text-gray-400 hover:text-gray-500">
+                  <a href="#" className=" text-gray hover:text-gray">
                     <MagnifyingGlassIcon
-                      className="h-8 w-8 text-slate-900 lg:hidden"
+                      className="h-8 w-8 text-slate lg:hidden"
                       aria-hidden="true"
                     />
                      <p className="hidden text-base font-normal text-[#312EDF] lg:flex">
@@ -152,7 +157,7 @@ export default function Navbar({ cartCount }: any) {
                 <div className="hidden ml-2 lg:flex">
                   <Link href="/cart" className=" flex items-center ">
                     {/* <ShoppingBagIcon
-                      className="h-8 w-8 text-slate-900"
+                      className="h-8 w-8 text-slate"
                       aria-hidden="true"
                     /> */}
                     <p className="pl-2 text-base font-normal text-[#312EDF]">
@@ -184,16 +189,7 @@ export default function Navbar({ cartCount }: any) {
                       
                       </div>
                     </div>
-                  ) : (
-                    <Link
-                      href="/login"
-                      className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                    >
-                      <p className="pl-2  text-base font-normal text-[#312EDF]">
-                            {'Account'} 
-                        </p>
-                    </Link>
-                  )}
+                  ) :null}
                   {/* <span className="h-6 w-px bg-gray-200" aria-hidden="true" /> */}
                 </div>
               </div>

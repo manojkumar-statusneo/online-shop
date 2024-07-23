@@ -39,7 +39,7 @@ export default function MyAddress() {
           <div className="ml-1 flex h-7 items-center">
             <button
               type="button"
-              className="z-50 px-2 text-gray-400"
+              className="z-50 px-2 text-gray"
               onClick={(e) => {
                 router.back();
               }}
@@ -64,18 +64,18 @@ export default function MyAddress() {
                   className="flex py-2 px-2 rounded-md mb-1 bg-white border"
                 >
                   <div className="ml-2 flex flex-1 flex-col justify-evenly">
-                    <div className="flex font-serif text-base font-medium text-slate-900">
+                    <div className="flex font-serif text-base font-medium text-slate">
                       <h3>{item?.name}</h3>
                     </div>
 
                     <div>
-                      <p className="text-sm text-gray-700">{`${item.address}`}</p>
+                      <p className="text-sm text-gray">{`${item.address}`}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-700">{`${item.city}, ${item.state}`}</p>
+                      <p className="text-sm text-gray">{`${item.city}, ${item.state}`}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-700">{`+91${item?.phoneNo}`}</p>
+                      <p className="text-sm text-gray">{`+91${item?.phoneNo}`}</p>
                     </div>
                   </div>
                 </li>
@@ -86,7 +86,7 @@ export default function MyAddress() {
         <Link href={`/address`}>
           <div className="flex mt-2 py-3  w-full items-center text-center bg-white justify-center">
             <PlusIcon className="h-6 w-6 text-black" aria-hidden="true" />
-            <p className=" text-slate-900 font-medium text-lg">
+            <p className=" text-slate font-medium text-lg">
               Add new address
             </p>
           </div>

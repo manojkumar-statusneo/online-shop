@@ -25,7 +25,7 @@ export default function Category() {
     <div>
       <div className="sm:px-6 lg:px-20 pt-0">
         <div className="mx-auto max-w-2xl sm:py-2 lg:max-w-none lg:py-8">
-          <h2 className="text-2xl py-2 text-center text-gray-900 lg:text-3xl">
+          <h2 className="text-2xl py-2 text-center text-slate lg:text-3xl">
             Shop By Category
           </h2>
 
@@ -48,7 +48,7 @@ export default function Category() {
                     alt={callout.name}
                   />
 
-                  <p className="font-sm text-xl py-2">{callout.name}</p>
+                  <p className="text-xl py-2 text-center text-slate lg:text-2xl">{callout.name}</p>
                 </div>
                 {/* <div>
                   <div className="relative h-40  overflow-hidden  bg-gray-400  sm:aspect-w-1 lg:aspect-h-1 lg:aspect-w-2 group-hover:opacity-75">
@@ -59,11 +59,11 @@ export default function Category() {
                       alt={callout.name}
                       className="h-full w-full object-cover object-center lg:h-52"
                     />
-                    <p className="text-base font-medium text-gray-900 text-center">
+                    <p className="text-base font-medium text-gray text-center">
                       {callout.name}
                     </p>
                   </div>
-                  <h3 className="mt-2 text-sm text-gray-500 text-center lg:text-xl"></h3>
+                  <h3 className="mt-2 text-sm text-gray text-center lg:text-xl"></h3>
                 </div> */}
               </Link>
             ))}

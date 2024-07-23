@@ -54,7 +54,7 @@ const CatWiseProducts = ({ params }: any) => {
                 </h2>
                 <div className="flex flex-row items-center">
                   <h3 className="text-sm font-medium">{`₹${callout.price}`}</h3>
-                  <h3 className=" text-xs line-through pl-1 text-gray-800 italic">{`₹${Number(
+                  <h3 className=" text-xs line-through pl-1 text-gray italic">{`₹${Number(
                     Number(callout.price) + 100
                   )}`}</h3>
                   <h3 className=" text-xs pl-1  text-green-800">
