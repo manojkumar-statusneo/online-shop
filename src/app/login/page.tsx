@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 
 export default function Login() {
-  let isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches;
+  let isMobile = null;
   const user = useSelector((state: any) => state.user?.user);
   const cart = useSelector((state: any) => state.cart);
   const router = useRouter();
@@ -65,6 +65,7 @@ export default function Login() {
   };
 
   useEffect(() => {
+  isMobile= typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches;
     getOrderList();
     getAddressList();
   }, []);

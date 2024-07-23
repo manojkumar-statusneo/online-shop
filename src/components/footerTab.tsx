@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ChevronRightIcon,
   HomeIcon,
@@ -21,7 +21,10 @@ const FooterTab = ({
 }: any) => {
   const user = useSelector((state: any) => state.user.user);
   const isLoggedIn = user?.mobile ? true : false;
-  let isMobile = window.matchMedia("(max-width: 600px)").matches;
+  let isMobile = null;
+  useEffect(()=>{
+    isMobile= window.matchMedia("(max-width: 600px)").matches
+  },[])
   if (!isMobile) {
     return (
       <div>

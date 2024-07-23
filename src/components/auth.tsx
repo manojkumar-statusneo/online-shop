@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -23,7 +23,7 @@ const Auth = ({
 }: any) => {
   const dispatch = useDispatch();
   console.log("nextRoute",nextRoute)
-  let isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches;
+  let isMobile = null
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showOtpScreen, setShowOtpScreen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -112,6 +112,9 @@ const Auth = ({
         console.log(error)});
   };
 
+  useEffect(()=>{
+    isMobile= typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches;
+  },[])
   if (!isMobile) {
     return (
       <div>

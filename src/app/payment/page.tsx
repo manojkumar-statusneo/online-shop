@@ -98,8 +98,14 @@ selectedAddress);
           router.push("/success");
           dispatch(resetCart());
         }
+        else{
+          toast.error("Something went wrong 😑");
+        }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        toast.error("Something went wrong 😑");
+        console.log(error)
+      });
   };
   const createOrder = async () => {
     try {
@@ -169,7 +175,6 @@ selectedAddress);
         const rzpay = new Razorpay(options as any);
         rzpay.on("payment.failed", function (response: any) {
           console.log("responseeeee rajorpay", response);
-  
           alert(response.error.reason);
         });
         rzpay.open();
